@@ -6,7 +6,7 @@ package com.teranpeterson.client;
  * @author Teran Peterson
  * @version v0.1.1
  */
-public class RegisterRequest {
+public class RegisterRequest extends Request {
     /**
      * User's userName
      */

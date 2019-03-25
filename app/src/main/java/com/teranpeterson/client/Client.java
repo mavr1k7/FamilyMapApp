@@ -10,38 +10,69 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Client {
-    public static void login(String serverHost, String serverPort) {
-        try {
-            URL url = new URL("http://" + serverHost + ":" + serverPort + "/user/register");
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+    public LoginResult register(String serverHost, String serverPort, RegisterRequest requestData) throws IOException {
+        URL url = new URL("http://" + serverHost + ":" + serverPort + "/user/register");
+        HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
+        try {
             http.setRequestMethod("POST");
             http.setDoOutput(true);
             http.addRequestProperty("Authorization", "");
             http.addRequestProperty("Accept", "application/json");
             http.connect();
 
-            RegisterRequest gsonRequest = new RegisterRequest("username", "password", "email", "firstname", "lastname", "m");
-
             OutputStream requestBody = http.getOutputStream();
             OutputStreamWriter sw = new OutputStreamWriter(requestBody);
-            sw.write(Serializer.serialize(gsonRequest));
+            sw.write(Serializer.serialize(requestData));
             sw.flush();
             requestBody.close();
 
             if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 InputStream respBody = http.getInputStream();
                 Reader reader = new InputStreamReader(respBody);
-                LoginResult result = Deserializer.loginResult(reader);
-                System.out.println(result.getAuthToken());
+                return Deserializer.loginResult(reader);
             } else {
                 InputStream respBody = http.getErrorStream();
                 Reader reader = new InputStreamReader(respBody);
-                LoginResult result = Deserializer.loginResult(reader);
-                System.out.println(result.getMessage());
+                return Deserializer.loginResult(reader);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            http.disconnect();
+        }
+    }
+
+    public LoginResult login(String uri, Request request) throws IOException {
+        URL url = new URL(uri);
+        HttpURLConnection http = (HttpURLConnection) url.openConnection();
+
+        try {
+            http.setRequestMethod("POST");
+            http.setDoOutput(true);
+            http.addRequestProperty("Authorization", "");
+            http.addRequestProperty("Accept", "application/json");
+            http.connect();
+
+            OutputStream requestBody = http.getOutputStream();
+            OutputStreamWriter sw = new OutputStreamWriter(requestBody);
+            if (request.getClass().toString().equals("class com.teranpeterson.client.LoginRequest")) {
+                sw.write(Serializer.serialize((LoginRequest) request));
+            } else if (request.getClass().toString().equals("class com.teranpeterson.client.RegisterRequest")) {
+                sw.write(Serializer.serialize((RegisterRequest) request));
+            }
+            sw.flush();
+            requestBody.close();
+
+            InputStream respBody;
+            if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                respBody = http.getInputStream();
+            } else {
+                respBody = http.getErrorStream();
+            }
+
+            Reader reader = new InputStreamReader(respBody);
+            return Deserializer.loginResult(reader);
+        } finally {
+            http.disconnect();
         }
     }
 }

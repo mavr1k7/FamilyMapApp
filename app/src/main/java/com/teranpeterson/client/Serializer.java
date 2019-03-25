@@ -9,9 +9,7 @@ import com.google.gson.Gson;
  * @version v0.1.2
  */
 public class Serializer {
-    public static String serialize(LoginResult result) {
-        return new Gson().toJson(result);
-    }
-
     public static String serialize(RegisterRequest request) { return new Gson().toJson(request); }
+
+    public static String serialize(LoginRequest request) { return new Gson().toJson(request); }
 }
