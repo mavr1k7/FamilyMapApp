@@ -50,6 +50,15 @@ public class PersonResult extends Result {
         super.success = false;
     }
 
+    public String find(String id) {
+        for (Person p : data) {
+            if (p.getPersonID().equals(id)) {
+                return p.getFirstName() + " " + p.getLastName();
+            }
+        }
+        return "";
+    }
+
     /**
      * Gets a list of all the data related to the user
      *

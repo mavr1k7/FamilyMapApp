@@ -52,14 +52,14 @@ public class Client {
         }
     }
 
-    public PersonResult syncPersons(String uri) throws IOException {
-        URL url = new URL(uri);
+    public PersonResult syncPersons(String uri, String authToken) throws IOException {
+        URL url = new URL(uri + "/person");
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
         try {
             http.setRequestMethod("GET");
             http.setDoOutput(false);
-            http.addRequestProperty("Authorization", "");
+            http.addRequestProperty("Authorization", authToken);
             http.addRequestProperty("Accept", "application/json");
             http.connect();
 
@@ -77,14 +77,14 @@ public class Client {
         }
     }
 
-    public EventResult syncEvents(String uri) throws IOException {
-        URL url = new URL(uri);
+    public EventResult syncEvents(String uri, String authToken) throws IOException {
+        URL url = new URL(uri + "/event");
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
         try {
             http.setRequestMethod("GET");
             http.setDoOutput(false);
-            http.addRequestProperty("Authorization", "");
+            http.addRequestProperty("Authorization", authToken);
             http.addRequestProperty("Accept", "application/json");
             http.connect();
 

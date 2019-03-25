@@ -20,6 +20,7 @@ import com.teranpeterson.client.request.LoginRequest;
 import com.teranpeterson.client.request.RegisterRequest;
 import com.teranpeterson.client.request.Request;
 import com.teranpeterson.client.result.LoginResult;
+import com.teranpeterson.client.result.PersonResult;
 
 import java.io.IOException;
 
@@ -35,6 +36,8 @@ public class LoginFragment extends Fragment {
     private RadioGroup mGenderField;
     private Button mSignInButton;
     private Button mRegisterButton;
+
+    private String mUserID;
 
     private static Request request;
     private static String url;
@@ -153,24 +156,33 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onPostExecute(LoginResult result) {
             if (result.isSuccess()) {
-                Toast.makeText(LoginFragment.this.getActivity(), result.getAuthToken(), Toast.LENGTH_SHORT).show();
-                Log.i("LoginFragment", "Success: " + result.getAuthToken());
+                mUserID = result.getPersonID();
+                new SyncTask().execute("http://" + mServerHostField.getText().toString() + ":" + mServerPortField.getText().toString(), result.getAuthToken());
             } else {
                 Toast.makeText(LoginFragment.this.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.i("LoginFragment", "Error: " + result.getMessage());
             }
         }
     }
 
-    private class SyncTask extends AsyncTask<Void, Void, Void> {
+    private class SyncTask extends AsyncTask<String, Void, PersonResult> {
         @Override
-        protected Void doInBackground(Void... params) {
+        protected PersonResult doInBackground(String... params) {
             try {
-                new Client().syncPersons(url);
+                new Client().syncEvents(params[0], params[1]);
+                return new Client().syncPersons(params[0], params[1]);
             } catch (IOException e) {
                 Log.e("LoginFragment-SyncTask", "Failed to connect to server: ", e);
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(PersonResult result) {
+            if (result.isSuccess()) {
+                Toast.makeText(LoginFragment.this.getActivity(), result.find(mUserID), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(LoginFragment.this.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
