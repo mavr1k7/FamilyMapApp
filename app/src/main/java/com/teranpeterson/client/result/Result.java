@@ -1,4 +1,4 @@
-package com.teranpeterson.client;
+package com.teranpeterson.client.result;
 
 /**
  * Base class that all result classes extend. Used to provide similar methods to all result objects.

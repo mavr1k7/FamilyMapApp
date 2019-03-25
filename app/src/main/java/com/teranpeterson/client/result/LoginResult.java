@@ -1,4 +1,4 @@
-package com.teranpeterson.client;
+package com.teranpeterson.client.result;
 
 /**
  * Contains information about the results of a Register Request

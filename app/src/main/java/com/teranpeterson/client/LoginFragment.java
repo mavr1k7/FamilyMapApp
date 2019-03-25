@@ -15,6 +15,12 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.teranpeterson.client.helpers.Client;
+import com.teranpeterson.client.request.LoginRequest;
+import com.teranpeterson.client.request.RegisterRequest;
+import com.teranpeterson.client.request.Request;
+import com.teranpeterson.client.result.LoginResult;
+
 import java.io.IOException;
 
 public class LoginFragment extends Fragment {
@@ -87,7 +93,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 request = new LoginRequest(mUserNameField.getText().toString(), mPasswordField.getText().toString());
                 url = "http://" + mServerHostField.getText().toString() + ":" + mServerPortField.getText().toString() + "/user/login";
-                new ConnectionTask().execute();
+                new LoginTask().execute();
             }
         });
 
@@ -97,7 +103,7 @@ public class LoginFragment extends Fragment {
                 request = new RegisterRequest(mUserNameField.getText().toString(), mPasswordField.getText().toString(),
                         mEmailField.getText().toString(), mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mGender);
                 url = "http://" + mServerHostField.getText().toString() + ":" + mServerPortField.getText().toString() + "/user/register";
-                new ConnectionTask().execute();
+                new LoginTask().execute();
             }
         });
 
@@ -133,13 +139,13 @@ public class LoginFragment extends Fragment {
         }
     };
 
-    private class ConnectionTask extends AsyncTask<Void, Void, LoginResult> {
+    private class LoginTask extends AsyncTask<Void, Void, LoginResult> {
         @Override
         protected LoginResult doInBackground(Void... params) {
             try {
                 return new Client().login(url, request);
             } catch (IOException e) {
-                Log.e("LoginFragment", "Failed to connect to server: ", e);
+                Log.e("LoginFragment-LoginTask", "Failed to connect to server: ", e);
             }
             return null;
         }
@@ -153,6 +159,18 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(LoginFragment.this.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.i("LoginFragment", "Error: " + result.getMessage());
             }
+        }
+    }
+
+    private class SyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                new Client().syncPersons(url);
+            } catch (IOException e) {
+                Log.e("LoginFragment-SyncTask", "Failed to connect to server: ", e);
+            }
+            return null;
         }
     }
 }

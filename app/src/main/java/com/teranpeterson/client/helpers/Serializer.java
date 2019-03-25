@@ -1,6 +1,8 @@
-package com.teranpeterson.client;
+package com.teranpeterson.client.helpers;
 
 import com.google.gson.Gson;
+import com.teranpeterson.client.request.LoginRequest;
+import com.teranpeterson.client.request.RegisterRequest;
 
 /**
  * Serializer for json objects

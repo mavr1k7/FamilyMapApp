@@ -1,4 +1,4 @@
-package com.teranpeterson.client;
+package com.teranpeterson.client.request;
 
 /**
  * Contains information about the Login Request
