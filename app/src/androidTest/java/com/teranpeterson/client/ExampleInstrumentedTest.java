@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package com.teranpeterson.client;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

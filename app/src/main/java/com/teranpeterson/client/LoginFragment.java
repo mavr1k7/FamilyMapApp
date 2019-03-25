@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package com.teranpeterson.client;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

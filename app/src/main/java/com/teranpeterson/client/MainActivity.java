@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package com.teranpeterson.client;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
