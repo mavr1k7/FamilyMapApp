@@ -35,11 +35,11 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/hint_ip"
+        android:importantForAutofill="no"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/label_server_port"
@@ -64,11 +64,11 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/hint_port"
+        android:importantForAutofill="no"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/edit_server_host"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_server_host" />
 
     <TextView
         android:id="@+id/label_user_name"
@@ -93,11 +93,11 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/hint_user_name"
+        android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/edit_server_port"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_server_port" />
 
     <TextView
         android:id="@+id/label_password"
@@ -122,11 +122,11 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/hint_password"
+        android:importantForAutofill="no"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/edit_user_name"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_user_name" />
 
     <TextView
         android:id="@+id/label_first_name"
@@ -151,11 +151,11 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/hint_first_name"
+        android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/edit_password"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_password" />
 
     <TextView
         android:id="@+id/label_last_name"
@@ -180,11 +180,11 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/hint_last_name"
+        android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/edit_first_name"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_first_name" />
 
     <TextView
         android:id="@+id/label_email"
@@ -209,11 +209,11 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/email"
+        android:importantForAutofill="no"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/edit_last_name"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_last_name" />
 
     <TextView
         android:id="@+id/label_gender"
@@ -236,6 +236,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="8dp"
+        android:checkedButton="@+id/radio_male"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -257,7 +258,7 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/button_sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -272,7 +273,7 @@
         app:layout_constraintTop_toBottomOf="@+id/radio_group_gender" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/button_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
