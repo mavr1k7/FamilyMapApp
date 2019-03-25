@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">FamilyMapClient</string>
+    <string name="server_host">Server Host:</string>
+    <string name="server_port">Server Port:</string>
+    <string name="user_name">User Name:</string>
+    <string name="password">Password:</string>
+    <string name="first_name">First Name:</string>
+    <string name="last_name">Last Name:</string>
+    <string name="email">Email:</string>
+    <string name="gender">Gender:</string>
+    <string name="hint_ip">10.0.2.2</string>
+    <string name="hint_port">8080</string>
+    <string name="hint_user_name">johndoe</string>
+    <string name="hint_password">password</string>
+    <string name="hint_first_name">John</string>
+    <string name="hint_last_name">Doe</string>
+    <string name="hint_email">johndoe@gmail.com</string>
+    <string name="male">Male</string>
+    <string name="Female">Female</string>
+    <string name="signin">SIGN IN</string>
+    <string name="register">REGISTER</string>
 </resources>
