@@ -16,7 +16,7 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Client {
+public class ServerProxy {
     public LoginResult login(String uri, Request request) throws IOException {
         URL url = new URL(uri);
         HttpURLConnection http = (HttpURLConnection) url.openConnection();

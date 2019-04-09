@@ -1,4 +1,4 @@
-package com.teranpeterson.client;
+package com.teranpeterson.client.ui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,7 +15,8 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.teranpeterson.client.helpers.Client;
+import com.teranpeterson.client.R;
+import com.teranpeterson.client.helpers.ServerProxy;
 import com.teranpeterson.client.request.LoginRequest;
 import com.teranpeterson.client.request.RegisterRequest;
 import com.teranpeterson.client.request.Request;
@@ -23,6 +24,7 @@ import com.teranpeterson.client.result.LoginResult;
 import com.teranpeterson.client.result.PersonResult;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public class LoginFragment extends Fragment {
     private EditText mServerHostField;
@@ -33,7 +35,6 @@ public class LoginFragment extends Fragment {
     private EditText mLastNameField;
     private EditText mEmailField;
     private String mGender = "m";
-    private RadioGroup mGenderField;
     private Button mSignInButton;
     private Button mRegisterButton;
 
@@ -41,7 +42,6 @@ public class LoginFragment extends Fragment {
 
     private static Request request;
     private static String url;
-    private static LoginResult result;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class LoginFragment extends Fragment {
         mFirstNameField = view.findViewById(R.id.edit_first_name);
         mLastNameField = view.findViewById(R.id.edit_last_name);
         mEmailField = view.findViewById(R.id.edit_email);
-        mGenderField = view.findViewById(R.id.radio_group_gender);
+        RadioGroup mGenderField = view.findViewById(R.id.radio_group_gender);
         mSignInButton = view.findViewById(R.id.button_sign_in);
         mRegisterButton = view.findViewById(R.id.button_register);
 
@@ -96,7 +96,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 request = new LoginRequest(mUserNameField.getText().toString(), mPasswordField.getText().toString());
                 url = "http://" + mServerHostField.getText().toString() + ":" + mServerPortField.getText().toString() + "/user/login";
-                new LoginTask().execute();
+                new LoginRegisterTask(LoginFragment.this).execute();
             }
         });
 
@@ -106,7 +106,7 @@ public class LoginFragment extends Fragment {
                 request = new RegisterRequest(mUserNameField.getText().toString(), mPasswordField.getText().toString(),
                         mEmailField.getText().toString(), mFirstNameField.getText().toString(), mLastNameField.getText().toString(), mGender);
                 url = "http://" + mServerHostField.getText().toString() + ":" + mServerPortField.getText().toString() + "/user/register";
-                new LoginTask().execute();
+                new LoginRegisterTask(LoginFragment.this).execute();
             }
         });
 
@@ -127,10 +127,10 @@ public class LoginFragment extends Fragment {
         @Override
         public void afterTextChanged(Editable s) {
             if (mServerHostField.getText().length() != 0 && mServerPortField.getText().length() != 0
-            && mUserNameField.getText().length() != 0 && mPasswordField.getText().length() != 0) {
+                    && mUserNameField.getText().length() != 0 && mPasswordField.getText().length() != 0) {
                 mSignInButton.setEnabled(true);
                 if (mFirstNameField.getText().length() != 0 && mLastNameField.getText().length() != 0
-                && mEmailField.getText().length() != 0) {
+                        && mEmailField.getText().length() != 0) {
                     mRegisterButton.setEnabled(true);
                 } else {
                     mRegisterButton.setEnabled(false);
@@ -142,46 +142,70 @@ public class LoginFragment extends Fragment {
         }
     };
 
-    private class LoginTask extends AsyncTask<Void, Void, LoginResult> {
+    private static class LoginRegisterTask extends AsyncTask<Void, Void, LoginResult> {
+
+        private WeakReference<LoginFragment> fragmentReference;
+
+        LoginRegisterTask(LoginFragment context) {
+            fragmentReference = new WeakReference<>(context);
+        }
+
         @Override
         protected LoginResult doInBackground(Void... params) {
             try {
-                return new Client().login(url, request);
+                return new ServerProxy().login(url, request);
             } catch (IOException e) {
-                Log.e("LoginFragment-LoginTask", "Failed to connect to server: ", e);
+                Log.e("LoginFragment-RegisterT", "Failed to connect to server: ", e);
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(LoginResult result) {
-            if (result.isSuccess()) {
-                mUserID = result.getPersonID();
-                new SyncTask().execute("http://" + mServerHostField.getText().toString() + ":" + mServerPortField.getText().toString(), result.getAuthToken());
+            LoginFragment fragment = fragmentReference.get();
+            if (fragment == null || fragment.isRemoving()) return;
+
+            if (result != null) {
+                if (result.isSuccess()) {
+                    fragment.mUserID = result.getPersonID();
+                    new DataSyncTask(fragment).execute("http://" + fragment.mServerHostField.getText().toString() + ":" + fragment.mServerPortField.getText().toString(), result.getAuthToken());
+                } else {
+                    Toast.makeText(fragment.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(LoginFragment.this.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.getActivity(), "Error connecting to server", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private class SyncTask extends AsyncTask<String, Void, PersonResult> {
+    private static class DataSyncTask extends AsyncTask<String, Void, PersonResult> {
+
+        private WeakReference<LoginFragment> fragmentReference;
+
+        DataSyncTask(LoginFragment context) {
+            fragmentReference = new WeakReference<>(context);
+        }
+
         @Override
         protected PersonResult doInBackground(String... params) {
             try {
-                new Client().syncEvents(params[0], params[1]);
-                return new Client().syncPersons(params[0], params[1]);
+                new ServerProxy().syncEvents(params[0], params[1]);
+                return new ServerProxy().syncPersons(params[0], params[1]);
             } catch (IOException e) {
-                Log.e("LoginFragment-SyncTask", "Failed to connect to server: ", e);
+                Log.e("LoginFragment-DataSyncT", "Failed to connect to server: ", e);
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(PersonResult result) {
+            LoginFragment fragment = fragmentReference.get();
+            if (fragment == null || fragment.isRemoving()) return;
+
             if (result.isSuccess()) {
-                Toast.makeText(LoginFragment.this.getActivity(), result.find(mUserID), Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.getActivity(), result.find(fragment.mUserID), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(LoginFragment.this.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
