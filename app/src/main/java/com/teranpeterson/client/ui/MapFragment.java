@@ -1,6 +1,7 @@
 package com.teranpeterson.client.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,16 +10,21 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.teranpeterson.client.R;
+import com.teranpeterson.client.model.Event;
+import com.teranpeterson.client.model.FamilyTree;
+import com.teranpeterson.client.model.Person;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
@@ -48,7 +54,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (mapFragment != null) mapFragment.getMapAsync(this);
 
         return view;
     }
@@ -67,6 +73,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mClient.disconnect();
     }
 
+    public static MapFragment newInstance() {
+        return new MapFragment();
+    }
+
     private boolean hasLocationPermission() {
         int result = ContextCompat
                 .checkSelfPermission(getActivity(), LOCATION_PERMISSIONS[0]);
@@ -74,12 +84,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_LOCATION_PERMISSIONS:
-                if (hasLocationPermission()) {
-                }
+                if (hasLocationPermission()) {}
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
@@ -89,9 +98,34 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Activity activity = getActivity();
+                if (activity != null) {
+                    TextView map_text = activity.findViewById(R.id.map_text);
+                    FamilyTree familyTree = FamilyTree.get();
+                    Event event = familyTree.getEvent(marker.getTitle());
+                    Person person = familyTree.getPerson(event.getPersonID());
+
+                    String text = person.getFirstName() + " " + person.getLastName() + "\n" + event.getEventType()
+                            + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
+                    map_text.setText(text);
+
+                    ImageView map_profile = activity.findViewById(R.id.map_profile);
+                    if (person.getGender().equals("f")) {
+                        map_profile.setImageResource(R.drawable.female);
+                    } else {
+                        map_profile.setImageResource(R.drawable.male);
+                    }
+                }
+                return false;
+            }
+        });
+
+        for (Event event : FamilyTree.get().getEvents()) {
+            LatLng marker = new LatLng(event.getLatitude(), event.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(marker).title(event.getEventID()));
+        }
     }
 }

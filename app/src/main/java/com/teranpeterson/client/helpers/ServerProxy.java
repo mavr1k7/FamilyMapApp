@@ -1,6 +1,6 @@
 package com.teranpeterson.client.helpers;
 
-import com.teranpeterson.client.result.EventResult;
+import com.teranpeterson.client.model.FamilyTree;
 import com.teranpeterson.client.request.LoginRequest;
 import com.teranpeterson.client.result.LoginResult;
 import com.teranpeterson.client.result.PersonResult;
@@ -17,7 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ServerProxy {
-    public LoginResult login(String uri, Request request) throws IOException {
+    public static LoginResult login(String uri, Request request) throws IOException {
         URL url = new URL(uri);
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
@@ -52,7 +52,7 @@ public class ServerProxy {
         }
     }
 
-    public PersonResult syncPersons(String uri, String authToken) throws IOException {
+    public static PersonResult syncPersons(String uri, String authToken) throws IOException {
         URL url = new URL(uri + "/person");
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
@@ -71,13 +71,16 @@ public class ServerProxy {
             }
 
             Reader reader = new InputStreamReader(respBody);
-            return Deserializer.personResult(reader);
+            PersonResult result = Deserializer.personResult(reader);
+            FamilyTree.get().setPersons(result.getData());
+            syncEvents(uri, authToken);
+            return result;
         } finally {
             http.disconnect();
         }
     }
 
-    public EventResult syncEvents(String uri, String authToken) throws IOException {
+    private static void syncEvents(String uri, String authToken) throws IOException {
         URL url = new URL(uri + "/event");
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
@@ -96,7 +99,7 @@ public class ServerProxy {
             }
 
             Reader reader = new InputStreamReader(respBody);
-            return Deserializer.eventResult(reader);
+            FamilyTree.get().setEvents(Deserializer.eventResult(reader).getData());
         } finally {
             http.disconnect();
         }

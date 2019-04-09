@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.teranpeterson.client.R;
+import com.teranpeterson.client.model.FamilyTree;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ERROR = 0;
@@ -23,7 +24,11 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
         if (fragment == null) {
-            fragment = new MapFragment();
+            if (FamilyTree.get().isLoggedIn()) {
+                fragment = new MapFragment();
+            } else {
+                fragment = new LoginFragment();
+            }
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
     }

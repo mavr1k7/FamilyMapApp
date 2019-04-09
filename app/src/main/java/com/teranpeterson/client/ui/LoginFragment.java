@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,7 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.teranpeterson.client.R;
-import com.teranpeterson.client.helpers.ServerProxy;
+import com.teranpeterson.client.model.FamilyTree;
 import com.teranpeterson.client.request.LoginRequest;
 import com.teranpeterson.client.request.RegisterRequest;
 import com.teranpeterson.client.request.Request;
@@ -25,6 +26,9 @@ import com.teranpeterson.client.result.PersonResult;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+
+import static com.teranpeterson.client.helpers.ServerProxy.login;
+import static com.teranpeterson.client.helpers.ServerProxy.syncPersons;
 
 public class LoginFragment extends Fragment {
     private EditText mServerHostField;
@@ -37,8 +41,6 @@ public class LoginFragment extends Fragment {
     private String mGender = "m";
     private Button mSignInButton;
     private Button mRegisterButton;
-
-    private String mUserID;
 
     private static Request request;
     private static String url;
@@ -145,6 +147,7 @@ public class LoginFragment extends Fragment {
     private static class LoginRegisterTask extends AsyncTask<Void, Void, LoginResult> {
 
         private WeakReference<LoginFragment> fragmentReference;
+        static final String TAG = "LoginRegisterTask";
 
         LoginRegisterTask(LoginFragment context) {
             fragmentReference = new WeakReference<>(context);
@@ -153,9 +156,9 @@ public class LoginFragment extends Fragment {
         @Override
         protected LoginResult doInBackground(Void... params) {
             try {
-                return new ServerProxy().login(url, request);
+                return login(url, request);
             } catch (IOException e) {
-                Log.e("LoginFragment-RegisterT", "Failed to connect to server: ", e);
+                Log.e(TAG, "Failed to connect to server: ", e);
             }
             return null;
         }
@@ -167,7 +170,7 @@ public class LoginFragment extends Fragment {
 
             if (result != null) {
                 if (result.isSuccess()) {
-                    fragment.mUserID = result.getPersonID();
+                    FamilyTree.get().setAuthToken(result.getAuthToken());
                     new DataSyncTask(fragment).execute("http://" + fragment.mServerHostField.getText().toString() + ":" + fragment.mServerPortField.getText().toString(), result.getAuthToken());
                 } else {
                     Toast.makeText(fragment.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
@@ -181,6 +184,7 @@ public class LoginFragment extends Fragment {
     private static class DataSyncTask extends AsyncTask<String, Void, PersonResult> {
 
         private WeakReference<LoginFragment> fragmentReference;
+        static final String TAG = "DataSyncTask";
 
         DataSyncTask(LoginFragment context) {
             fragmentReference = new WeakReference<>(context);
@@ -189,10 +193,9 @@ public class LoginFragment extends Fragment {
         @Override
         protected PersonResult doInBackground(String... params) {
             try {
-                new ServerProxy().syncEvents(params[0], params[1]);
-                return new ServerProxy().syncPersons(params[0], params[1]);
+                return syncPersons(params[0], params[1]);
             } catch (IOException e) {
-                Log.e("LoginFragment-DataSyncT", "Failed to connect to server: ", e);
+                Log.e(TAG, "Failed to connect to server: ", e);
             }
             return null;
         }
@@ -203,7 +206,10 @@ public class LoginFragment extends Fragment {
             if (fragment == null || fragment.isRemoving()) return;
 
             if (result.isSuccess()) {
-                Toast.makeText(fragment.getActivity(), result.find(fragment.mUserID), Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = fragment.getFragmentManager();
+                if (fragmentManager != null) {
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, MapFragment.newInstance()).commit();
+                }
             } else {
                 Toast.makeText(fragment.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
             }
