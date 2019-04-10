@@ -8,6 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -38,6 +41,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         mClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -73,14 +77,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mClient.disconnect();
     }
 
-    public static MapFragment newInstance() {
-        return new MapFragment();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_map, menu);
     }
 
-    private boolean hasLocationPermission() {
-        int result = ContextCompat
-                .checkSelfPermission(getActivity(), LOCATION_PERMISSIONS[0]);
-        return result == PackageManager.PERMISSION_GRANTED;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter:
+                return true;
+            case R.id.search:
+                return true;
+            case R.id.settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -127,5 +141,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             LatLng marker = new LatLng(event.getLatitude(), event.getLongitude());
             mMap.addMarker(new MarkerOptions().position(marker).title(event.getEventID()));
         }
+    }
+
+    public static MapFragment newInstance() {
+        return new MapFragment();
+    }
+
+    private boolean hasLocationPermission() {
+        int result = ContextCompat
+                .checkSelfPermission(getActivity(), LOCATION_PERMISSIONS[0]);
+        return result == PackageManager.PERMISSION_GRANTED;
     }
 }
