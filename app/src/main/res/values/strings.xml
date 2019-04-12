@@ -42,4 +42,28 @@
     <string name="male_events">Male Events</string>
     <string name="female_events">Female Events</string>
     <string name="gender_events_desc">FILTER EVENTS BASED ON GENDER</string>
+    <string name="life_story_lines">Life Story Lines</string>
+    <string name="life_story_lines_desc">SHOW LIFE STORY LINES</string>
+    <string name="family_tree_lines">Family Tree Lines</string>
+    <string name="family_tree_lines_desc">SHOW FAMILY TREE LINES</string>
+    <string name="spouse_lines">Spouse Lines</string>
+    <string name="spouse_lines_desc">SHOW SPOUSE LINES</string>
+    <string name="map_type">Map Type</string>
+    <string name="map_type_desc">BACKGROUND DISPLAY ON MAP</string>
+    <string name="resync_date">Re-sync Data</string>
+    <string name="resync_date_desc">FROM FAMILY MAP SERVER</string>
+    <string name="logout">Logout</string>
+    <string name="logout_desc">RETURNS TO LOGIN SCREEN</string>
+    <string-array name="setting_color_options">
+        <item>Red</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Blue</item>
+    </string-array>
+    <string-array name="setting_map_options">
+        <item>Normal</item>
+        <item>Hybrid</item>
+        <item>Satellite</item>
+        <item>Terrain</item>
+    </string-array>
 </resources>

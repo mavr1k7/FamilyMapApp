@@ -33,14 +33,6 @@ public class Filter {
         return sFilter;
     }
 
-    public static Filter getsFilter() {
-        return sFilter;
-    }
-
-    public static void setsFilter(Filter sFilter) {
-        Filter.sFilter = sFilter;
-    }
-
     public boolean isBirth() {
         return birth;
     }

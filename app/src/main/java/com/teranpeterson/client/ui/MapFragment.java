@@ -2,6 +2,7 @@ package com.teranpeterson.client.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import com.teranpeterson.client.model.Person;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
+    private String mPersonID;
     private GoogleApiClient mClient;
     private static final int REQUEST_LOCATION_PERMISSIONS = 0;
     private static final String[] LOCATION_PERMISSIONS = new String[]{
@@ -60,6 +62,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) mapFragment.getMapAsync(this);
 
+        view.findViewById(R.id.map_text).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPersonID != null) startActivity(PersonActivity.newIntent(getContext(), mPersonID));
+            }
+        });
+
+        view.findViewById(R.id.map_profile).setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPersonID != null) startActivity(PersonActivity.newIntent(getContext(), mPersonID));
+            }
+        }));
+
         return view;
     }
 
@@ -87,6 +103,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.filter:
+                startActivity(new Intent(this.getContext(), FilterActivity.class));
                 return true;
             case R.id.search:
                 return true;
@@ -121,6 +138,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     FamilyTree familyTree = FamilyTree.get();
                     Event event = familyTree.getEvent(marker.getTitle());
                     Person person = familyTree.getPerson(event.getPersonID());
+                    mPersonID = person.getPersonID();
 
                     String text = person.getFirstName() + " " + person.getLastName() + "\n" + event.getEventType()
                             + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";

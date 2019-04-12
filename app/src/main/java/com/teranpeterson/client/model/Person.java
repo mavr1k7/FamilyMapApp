@@ -227,6 +227,17 @@ public class Person {
     }
 
     /**
+     * Gets the person's gender written out
+     *
+     * @return 'Male' or 'Female'
+     */
+    public String getGenderFull() {
+        if (gender.equals("m")) return "Male";
+        if (gender.equals("f")) return "Female";
+        return "";
+    }
+
+    /**
      * Gets the personID for the person's father
      *
      * @return Father's personID

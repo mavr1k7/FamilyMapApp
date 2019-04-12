@@ -33,15 +33,15 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".ui.FilterActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainActivity" />
-        <activity android:name=".ui.PersonActivity" />
+        <activity android:name=".ui.FilterActivity" android:parentActivityName=".ui.MainActivity" />
+        <activity android:name=".ui.PersonActivity" android:parentActivityName=".ui.MainActivity" />
     </application>
 
 </manifest>
