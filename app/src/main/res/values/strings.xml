@@ -27,4 +27,19 @@
     <string name="first_name_caps">FIRST NAME</string>
     <string name="last_name_caps">LAST NAME</string>
     <string name="gender_caps">GENDER</string>
+    <string name="birth_events">Birth Events</string>
+    <string name="birth_events_desc">FILTER BY BIRTH EVENTS</string>
+    <string name="baptism_events">Baptism Events</string>
+    <string name="baptism_events_desc">FILTER BY BAPTISM EVENTS</string>
+    <string name="marriage_events">Marriage Events</string>
+    <string name="marriage_events_desc">FILTER BY MARRIAGE EVENTS</string>
+    <string name="death_events">Death Events</string>
+    <string name="death_events_desc">FILTER BY DEATH EVENTS</string>
+    <string name="fathers_side">Father\'s Side</string>
+    <string name="fathers_side_desc">FILTER BY FATHER\'S SIDE OF FAMILY</string>
+    <string name="mothers_side">Mother\'s Side</string>
+    <string name="mothers_side_desc">FILTER BY MOTHER\'S SIDE OF FAMILY</string>
+    <string name="male_events">Male Events</string>
+    <string name="female_events">Female Events</string>
+    <string name="gender_events_desc">FILTER EVENTS BASED ON GENDER</string>
 </resources>

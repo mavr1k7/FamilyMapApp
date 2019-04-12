@@ -1,5 +1,7 @@
 package com.teranpeterson.client.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -44,6 +46,14 @@ public class Person {
      * Spouse of the person (can be null)
      */
     private String spouse;
+    /**
+     * Which side of the family the person is on
+     */
+    private transient String side;
+    /**
+     * List of events for the person
+     */
+    private transient List<Event> events;
 
     /**
      * Creates a blank person
@@ -73,6 +83,7 @@ public class Person {
         this.father = father;
         this.mother = mother;
         this.spouse = spouse;
+        this.events = new ArrayList<>();
     }
 
     /**
@@ -267,6 +278,45 @@ public class Person {
      */
     public void setSpouse(String spouse) {
         this.spouse = spouse;
+    }
+
+    /**
+     * Gets the list of events for the person
+     *
+     * @return List of event ids
+     */
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    /**
+     * Sets the list of events for the person
+     *
+     * @param events List of event ids
+     */
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    /**
+     * Adds an event to the person
+     *
+     * @param event Event id
+     */
+    public void addEvent(Event event) {
+        this.events.add(event);
+    }
+
+    public String getSide() {
+        return side;
+    }
+
+    public void setSide(String side) {
+        this.side = side;
+    }
+
+    public String getFirstEvent() {
+        return "";
     }
 
     @Override

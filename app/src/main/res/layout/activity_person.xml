@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/person_first_name" />
 
     <View
-        android:id="@+id/line1"
+        android:id="@+id/first_name_line"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="16dp"
@@ -68,7 +68,7 @@
         app:layout_constraintTop_toBottomOf="@+id/person_last_name" />
 
     <View
-        android:id="@+id/line2"
+        android:id="@+id/last_name_line"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="16dp"
@@ -104,7 +104,7 @@
         app:layout_constraintTop_toBottomOf="@+id/person_gender" />
 
     <View
-        android:id="@+id/line3"
+        android:id="@+id/gender_line"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="16dp"
@@ -115,7 +115,7 @@
         app:layout_constraintTop_toBottomOf="@+id/gender_label" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/person_exp_recycler"
+        android:id="@+id/person_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"

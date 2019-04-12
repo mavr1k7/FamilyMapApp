@@ -46,7 +46,9 @@ public class ServerProxy {
             }
 
             Reader reader = new InputStreamReader(respBody);
-            return Deserializer.loginResult(reader);
+            LoginResult result = Deserializer.loginResult(reader);
+            FamilyTree.get().setRootUserID(result.getPersonID());
+            return result;
         } finally {
             http.disconnect();
         }
@@ -100,6 +102,7 @@ public class ServerProxy {
 
             Reader reader = new InputStreamReader(respBody);
             FamilyTree.get().setEvents(Deserializer.eventResult(reader).getData());
+            FamilyTree.get().associate();
         } finally {
             http.disconnect();
         }
