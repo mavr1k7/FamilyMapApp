@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.teranpeterson.client.R;
 import com.teranpeterson.client.helpers.Header;
 import com.teranpeterson.client.helpers.Item;
-import com.teranpeterson.client.helpers.RecyclerAdapter;
+import com.teranpeterson.client.helpers.ExpandableRecyclerAdapter;
 import com.teranpeterson.client.model.Event;
 import com.teranpeterson.client.model.FamilyTree;
 import com.teranpeterson.client.model.Person;
@@ -84,7 +84,7 @@ public class PersonActivity extends AppCompatActivity {
         Header family = new Header("Family", persons);
         categories.add(family);
 
-        RecyclerAdapter adapter = new RecyclerAdapter(categories);
+        ExpandableRecyclerAdapter adapter = new ExpandableRecyclerAdapter(categories);
         recyclerView.setAdapter(adapter);
     }
 

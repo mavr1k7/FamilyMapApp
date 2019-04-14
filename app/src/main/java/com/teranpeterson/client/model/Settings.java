@@ -12,6 +12,9 @@ public class Settings {
     private String mSpouseLinesColor;
     private String mMapType;
 
+    private String[] colorOptions;
+    private String[] mapOptions;
+
     private Settings() {
         mLifeStoryLines = true;
         mFamilyTreeLines = true;
@@ -20,6 +23,18 @@ public class Settings {
         mFamilyTreeLinesColor = "White";
         mSpouseLinesColor = "Blue";
         mMapType = "Normal";
+        colorOptions = new String[] {
+                "Red",
+                "Yellow",
+                "Green",
+                "Blue"
+        };
+        mapOptions = new String[] {
+                "Normal",
+                "Hybrid",
+                "Satellite",
+                "Terrain"
+        };
     }
 
     public static Settings get() {
@@ -77,8 +92,46 @@ public class Settings {
         this.mSpouseLinesColor = mSpouseLinesColor;
     }
 
+    public String[] getColorOptions() {
+        return this.colorOptions;
+    }
+
+    public int getColorInt(String color) {
+        switch (color) {
+            case "Red":
+                return 0;
+            case "Yellow":
+                return 1;
+            case "Green":
+                return 2;
+            case "Blue":
+                return 3;
+            default:
+                return 0;
+        }
+    }
+
     public String getMapType() {
         return mMapType;
+    }
+
+    public String[] getMapOptions() {
+        return this.mapOptions;
+    }
+
+    public int getMapTypeInt() {
+        switch (mMapType) {
+            case "Normal":
+                return 0;
+            case "Hybrid":
+                return 1;
+            case "Satellite":
+                return 2;
+            case "Terrain":
+                return 3;
+            default:
+                return 0;
+        }
     }
 
     public void setMapType(String mMapType) {

@@ -10,8 +10,8 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.util.List;
 
-public class RecyclerAdapter extends ExpandableRecyclerViewAdapter<HeaderViewHolder, ItemViewHolder> {
-    public RecyclerAdapter(List<? extends ExpandableGroup> groups) {
+public class ExpandableRecyclerAdapter extends ExpandableRecyclerViewAdapter<HeaderViewHolder, ItemViewHolder> {
+    public ExpandableRecyclerAdapter(List<? extends ExpandableGroup> groups) {
         super(groups);
     }
 

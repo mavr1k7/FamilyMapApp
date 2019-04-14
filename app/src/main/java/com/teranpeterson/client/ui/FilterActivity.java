@@ -24,6 +24,17 @@ public class FilterActivity extends AppCompatActivity {
         Switch maleFilter = findViewById(R.id.filter_male_switch);
         Switch femaleFilter = findViewById(R.id.filter_female_switch);
 
+        Filter filter = Filter.get();
+
+        birthFilter.setChecked(filter.isBirth());
+        baptismFilter.setChecked(filter.isBaptism());
+        marriageFilter.setChecked(filter.isMarriage());
+        deathFilter.setChecked(filter.isDeath());
+        fatherFilter.setChecked(filter.isFather());
+        motherFilter.setChecked(filter.isMother());
+        maleFilter.setChecked(filter.isMale());
+        femaleFilter.setChecked(filter.isFemale());
+
         birthFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

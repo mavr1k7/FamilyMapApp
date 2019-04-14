@@ -17,14 +17,25 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        Settings settings = Settings.get();
+
         Switch lifeStorySetting = findViewById(R.id.setting_life_story_switch);
         Switch familyTreeSetting = findViewById(R.id.setting_family_tree_switch);
         Switch spouseSetting = findViewById(R.id.setting_spouse_switch);
+
+        lifeStorySetting.setChecked(settings.isLifeStoryLines());
+        familyTreeSetting.setChecked(settings.isFamilyTreeLines());
+        spouseSetting.setChecked(settings.isSpouseLines());
 
         Spinner lifeStoryColor = findViewById(R.id.setting_life_story_spinner);
         Spinner familyTreeColor = findViewById(R.id.setting_family_tree_spinner);
         Spinner spouseColor = findViewById(R.id.setting_spouse_spinner);
         Spinner mapMode = findViewById(R.id.setting_map_type_spinner);
+
+        lifeStoryColor.setSelection(settings.getColorInt(settings.getLifeStoryLinesColor()));
+        familyTreeColor.setSelection(settings.getColorInt(settings.getFamilyTreeLinesColor()));
+        spouseColor.setSelection(settings.getColorInt(settings.getSpouseLinesColor()));
+        mapMode.setSelection(settings.getMapTypeInt());
 
         lifeStorySetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
