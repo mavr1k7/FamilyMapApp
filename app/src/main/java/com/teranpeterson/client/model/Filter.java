@@ -96,6 +96,13 @@ public class Filter {
         this.mFemale = female;
     }
 
+    public boolean filter(Event event) {
+        switch (event.getEventType()) {
+
+        }
+        return true;
+    }
+
     @NonNull
     @Override
     public String toString() {

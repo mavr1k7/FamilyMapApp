@@ -4,7 +4,9 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FamilyTree {
     private static FamilyTree sFamilyTree;
@@ -13,6 +15,7 @@ public class FamilyTree {
     private String mAuthToken;
     private List<Person> mPersons;
     private List<Event> mEvents;
+    private Map<String, Boolean> mEventTypes = new HashMap<>();
 
     private FamilyTree() {
         mPersons = new ArrayList<>();
@@ -40,6 +43,12 @@ public class FamilyTree {
     }
 
     public List<Event> getEvents() {
+        List<Event> filtered = new ArrayList<>();
+        for (Event event : mEvents) {
+            if (Filter.get().filter(event)) {
+
+            }
+        }
         return mEvents;
     }
 
@@ -70,6 +79,22 @@ public class FamilyTree {
     }
 
     public void setRootUserID(String userID) { this.mRootUserID = userID; }
+
+    public Map<String, Boolean> getEventTypes() {
+        return mEventTypes;
+    }
+
+    public void setEventTypes(Map<String, Boolean> mEventTypes) {
+        this.mEventTypes = mEventTypes;
+    }
+
+    public void findEventTypes() {
+        for (Event event : mEvents) {
+            if (!mEventTypes.containsKey(event.getEventType())) {
+                mEventTypes.put(event.getEventType(), Boolean.TRUE);
+            }
+        }
+    }
 
     public boolean isLoggedIn() {
         return (mAuthToken != null && !mAuthToken.isEmpty());

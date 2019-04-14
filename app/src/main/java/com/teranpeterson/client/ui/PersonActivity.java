@@ -9,9 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.teranpeterson.client.R;
+import com.teranpeterson.client.helpers.Header;
+import com.teranpeterson.client.helpers.Item;
+import com.teranpeterson.client.helpers.RecyclerAdapter;
+import com.teranpeterson.client.model.Event;
 import com.teranpeterson.client.model.FamilyTree;
 import com.teranpeterson.client.model.Person;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonActivity extends AppCompatActivity {
@@ -38,7 +43,49 @@ public class PersonActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.person_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-//        List<RecyclerHeader> header
+        List<Header> categories = new ArrayList<>();
+
+        List<Item> events = new ArrayList<>();
+        for (Event event : person.getEvents()) {
+            String part1 = event.getEventType() + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
+            String part2 = person.getFirstName() + " " + person.getLastName();
+            events.add(new Item(part1, part2, false, false));
+        }
+
+        Header lifeEvents = new Header("Life Events", events);
+        categories.add(lifeEvents);
+
+        List<Item> persons = new ArrayList<>();
+        if (person.getFather() != null) {
+            Person father = FamilyTree.get().getPerson(person.getFather());
+            String part1 = father.getFirstName() + " " + father.getLastName();
+            String part2 = "Father";
+            persons.add(new Item(part1, part2, true, father.isMale()));
+        }
+        if (person.getMother() != null) {
+            Person mother = FamilyTree.get().getPerson(person.getMother());
+            String part1 = mother.getFirstName() + " " + mother.getLastName();
+            String part2 = "Mother";
+            persons.add(new Item(part1, part2, true, mother.isMale()));
+        }
+        if (person.getSpouse() != null) {
+            Person spouse = FamilyTree.get().getPerson(person.getSpouse());
+            String part1 = spouse.getFirstName() + " " + spouse.getLastName();
+            String part2 = "Spouse";
+            persons.add(new Item(part1, part2, true, spouse.isMale()));
+        }
+        if (person.getChild() != null) {
+            Person child = FamilyTree.get().getPerson(person.getChild());
+            String part1 = child.getFirstName() + " " + child.getLastName();
+            String part2 = "Child";
+            persons.add(new Item(part1, part2, true, child.isMale()));
+        }
+
+        Header family = new Header("Family", persons);
+        categories.add(family);
+
+        RecyclerAdapter adapter = new RecyclerAdapter(categories);
+        recyclerView.setAdapter(adapter);
     }
 
     public static Intent newIntent(Context context, String personID) {

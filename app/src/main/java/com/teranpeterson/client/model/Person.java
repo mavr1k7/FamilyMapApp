@@ -241,6 +241,12 @@ public class Person {
         return "";
     }
 
+    public boolean isMale() {
+        if (gender.equals("m")) return true;
+        if (gender.equals("f")) return false;
+        return false;
+    }
+
     /**
      * Gets the personID for the person's father
      *
@@ -296,7 +302,7 @@ public class Person {
     }
 
     /**
-     * Gets the list of events for the person
+     * Gets the list of events for the person TODO: Sort
      *
      * @return List of event ids
      */
