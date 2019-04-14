@@ -1,7 +1,5 @@
 package com.teranpeterson.client.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
@@ -17,65 +15,65 @@ public class FilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
-        Switch mBirthFilter = findViewById(R.id.filter_birth_switch);
-        Switch mBaptismFilter = findViewById(R.id.filter_baptism_switch);
-        Switch mMarriageFilter = findViewById(R.id.filter_marriage_switch);
-        Switch mDeathFilter = findViewById(R.id.filter_death_switch);
-        Switch mFatherFilter = findViewById(R.id.filter_father_switch);
-        Switch mMotherFilter = findViewById(R.id.filter_mother_switch);
-        Switch mMaleFilter = findViewById(R.id.filter_male_switch);
-        Switch mFemaleFilter = findViewById(R.id.filter_female_switch);
+        Switch birthFilter = findViewById(R.id.filter_birth_switch);
+        Switch baptismFilter = findViewById(R.id.filter_baptism_switch);
+        Switch marriageFilter = findViewById(R.id.filter_marriage_switch);
+        Switch deathFilter = findViewById(R.id.filter_death_switch);
+        Switch fatherFilter = findViewById(R.id.filter_father_switch);
+        Switch motherFilter = findViewById(R.id.filter_mother_switch);
+        Switch maleFilter = findViewById(R.id.filter_male_switch);
+        Switch femaleFilter = findViewById(R.id.filter_female_switch);
 
-        mBirthFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        birthFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Filter.get().setBirth(isChecked);
             }
         });
 
-        mBaptismFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        baptismFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Filter.get().setBaptism(isChecked);
             }
         });
 
-        mMarriageFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        marriageFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Filter.get().setMarriage(isChecked);
             }
         });
 
-        mDeathFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        deathFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Filter.get().setDeath(isChecked);
             }
         });
 
-        mFatherFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        fatherFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Filter.get().setFather(isChecked);
             }
         });
 
-        mMotherFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        motherFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Filter.get().setMother(isChecked);
             }
         });
 
-        mMaleFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        maleFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Filter.get().setMale(isChecked);
             }
         });
 
-        mFemaleFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        femaleFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Filter.get().setFemale(isChecked);

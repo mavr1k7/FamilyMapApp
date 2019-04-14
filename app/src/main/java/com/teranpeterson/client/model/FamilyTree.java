@@ -80,20 +80,21 @@ public class FamilyTree {
         if (root != null) {
             root.setEvents(getMyEvents(mRootUserID));
             root.setSide("both");
-            associateHelper(root.getFather(), "father");
-            associateHelper(root.getMother(), "mother");
+            associateHelper(root.getFather(), "father", mRootUserID);
+            associateHelper(root.getMother(), "mother", mRootUserID);
             Log.d("Associate", toString());
         }
     }
 
-    private void associateHelper(String id, String side) {
+    private void associateHelper(String id, String side, String child) {
         Person person = getPerson(id);
         if (person == null) return;
 
         person.setEvents(getMyEvents(id));
         person.setSide(side);
-        associateHelper(person.getFather(), side);
-        associateHelper(person.getMother(), side);
+        person.setChild(child);
+        associateHelper(person.getFather(), side, id);
+        associateHelper(person.getMother(), side, id);
     }
 
     @NonNull

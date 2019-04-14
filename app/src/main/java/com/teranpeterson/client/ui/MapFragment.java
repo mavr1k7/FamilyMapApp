@@ -106,8 +106,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 startActivity(new Intent(this.getContext(), FilterActivity.class));
                 return true;
             case R.id.search:
+                startActivity(new Intent(this.getContext(), SearchActivity.class));
                 return true;
             case R.id.settings:
+                startActivity(new Intent(this.getContext(), SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

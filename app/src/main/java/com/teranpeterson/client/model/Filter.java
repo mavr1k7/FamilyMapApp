@@ -1,29 +1,28 @@
 package com.teranpeterson.client.model;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 public class Filter {
     private static Filter sFilter;
 
-    private boolean birth;
-    private boolean baptism;
-    private boolean marriage;
-    private boolean death;
-    private boolean father;
-    private boolean mother;
-    private boolean male;
-    private boolean female;
+    private boolean mBirth;
+    private boolean mBaptism;
+    private boolean mMarriage;
+    private boolean mDeath;
+    private boolean mFather;
+    private boolean mMother;
+    private boolean mMale;
+    private boolean mFemale;
 
     private Filter() {
-        birth = false;
-        baptism = false;
-        marriage = false;
-        death = false;
-        father = false;
-        mother = false;
-        male = false;
-        female = false;
+        mBirth = false;
+        mBaptism = false;
+        mMarriage = false;
+        mDeath = false;
+        mFather = false;
+        mMother = false;
+        mMale = false;
+        mFemale = false;
     }
 
     public static Filter get() {
@@ -34,72 +33,72 @@ public class Filter {
     }
 
     public boolean isBirth() {
-        return birth;
+        return mBirth;
     }
 
     public void setBirth(boolean birth) {
-        this.birth = birth;
+        this.mBirth = birth;
     }
 
     public boolean isBaptism() {
-        return baptism;
+        return mBaptism;
     }
 
     public void setBaptism(boolean baptism) {
-        this.baptism = baptism;
+        this.mBaptism = baptism;
     }
 
     public boolean isMarriage() {
-        return marriage;
+        return mMarriage;
     }
 
     public void setMarriage(boolean marriage) {
-        this.marriage = marriage;
+        this.mMarriage = marriage;
     }
 
     public boolean isDeath() {
-        return death;
+        return mDeath;
     }
 
     public void setDeath(boolean death) {
-        this.death = death;
+        this.mDeath = death;
     }
 
     public boolean isFather() {
-        return father;
+        return mFather;
     }
 
     public void setFather(boolean father) {
-        this.father = father;
+        this.mFather = father;
     }
 
     public boolean isMother() {
-        return mother;
+        return mMother;
     }
 
     public void setMother(boolean mother) {
-        this.mother = mother;
+        this.mMother = mother;
     }
 
     public boolean isMale() {
-        return male;
+        return mMale;
     }
 
     public void setMale(boolean male) {
-        this.male = male;
+        this.mMale = male;
     }
 
     public boolean isFemale() {
-        return female;
+        return mFemale;
     }
 
     public void setFemale(boolean female) {
-        this.female = female;
+        this.mFemale = female;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "Birth: " + birth + ", Father: " + father + ", Male: " + male + "\n";
+        return "Birth: " + mBirth + ", Father: " + mFather + ", Male: " + mMale + "\n";
     }
 }

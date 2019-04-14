@@ -12,6 +12,8 @@ import com.teranpeterson.client.R;
 import com.teranpeterson.client.model.FamilyTree;
 import com.teranpeterson.client.model.Person;
 
+import java.util.List;
+
 public class PersonActivity extends AppCompatActivity {
     private static final String EXTRA_PERSON_ID = "com.teranpeterson.client.ui.PersonActivity.personID";
 
@@ -35,6 +37,8 @@ public class PersonActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.person_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+//        List<RecyclerHeader> header
     }
 
     public static Intent newIntent(Context context, String personID) {

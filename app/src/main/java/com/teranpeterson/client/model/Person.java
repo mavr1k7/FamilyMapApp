@@ -51,6 +51,10 @@ public class Person {
      */
     private transient String side;
     /**
+     * Child of the person (can be null)
+     */
+    private transient String child;
+    /**
      * List of events for the person
      */
     private transient List<Event> events;
@@ -324,6 +328,14 @@ public class Person {
 
     public void setSide(String side) {
         this.side = side;
+    }
+
+    public String getChild() {
+        return child;
+    }
+
+    public void setChild(String child) {
+        this.child = child;
     }
 
     public String getFirstEvent() {

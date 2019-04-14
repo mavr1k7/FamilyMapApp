@@ -36,12 +36,13 @@
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.FilterActivity" android:parentActivityName=".ui.MainActivity" />
         <activity android:name=".ui.PersonActivity" android:parentActivityName=".ui.MainActivity" />
+        <activity android:name=".ui.SettingsActivity" android:parentActivityName=".ui.MainActivity" />
     </application>
 
 </manifest>
