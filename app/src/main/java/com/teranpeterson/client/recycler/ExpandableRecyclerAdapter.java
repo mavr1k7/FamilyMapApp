@@ -6,9 +6,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.teranpeterson.client.R;
+import com.teranpeterson.client.model.Event;
 import com.teranpeterson.client.recycler.HeaderViewHolder;
 import com.teranpeterson.client.recycler.Item;
 import com.teranpeterson.client.recycler.ItemViewHolder;
+import com.teranpeterson.client.ui.EventActivity;
 import com.teranpeterson.client.ui.PersonActivity;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
@@ -45,7 +47,7 @@ public class ExpandableRecyclerAdapter extends ExpandableRecyclerViewAdapter<Hea
                 if (item.isPerson()) {
                     v.getContext().startActivity(PersonActivity.newIntent(v.getContext(), item.getId()));
                 } else {
-                    Toast.makeText(v.getContext(), "Event ID: " + item.getId(), Toast.LENGTH_LONG).show();
+                    v.getContext().startActivity(EventActivity.newIntent(v.getContext(), item.getId()));
                 }
             }
         });

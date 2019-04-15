@@ -170,8 +170,10 @@ public class LoginFragment extends Fragment {
 
             if (result != null) {
                 if (result.isSuccess()) {
+                    String url = "http://" + fragment.mServerHostField.getText().toString() + ":" + fragment.mServerPortField.getText().toString();
+                    FamilyTree.get().setUrl(url);
                     FamilyTree.get().setAuthToken(result.getAuthToken());
-                    new DataSyncTask(fragment).execute("http://" + fragment.mServerHostField.getText().toString() + ":" + fragment.mServerPortField.getText().toString(), result.getAuthToken());
+                    new DataSyncTask(fragment).execute(url, result.getAuthToken());
                 } else {
                     Toast.makeText(fragment.getActivity(), result.getMessage(), Toast.LENGTH_SHORT).show();
                 }

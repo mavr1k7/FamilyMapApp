@@ -44,6 +44,7 @@
         <activity android:name=".ui.PersonActivity" android:parentActivityName=".ui.MainActivity" />
         <activity android:name=".ui.SettingsActivity" android:parentActivityName=".ui.MainActivity" />
         <activity android:name=".ui.SearchActivity" android:parentActivityName=".ui.MainActivity" />
+        <activity android:name=".ui.EventActivity" />
     </application>
 
 </manifest>

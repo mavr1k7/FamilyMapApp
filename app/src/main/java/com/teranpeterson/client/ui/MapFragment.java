@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -33,7 +34,10 @@ import com.teranpeterson.client.model.Person;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private String mPersonID;
+    private String mEventID;
     private GoogleApiClient mClient;
+
+    private static final String ARG_EVENT_ID = "event_id";
     private static final int REQUEST_LOCATION_PERMISSIONS = 0;
     private static final String[] LOCATION_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -43,7 +47,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+
+        Bundle arguments = getArguments();
+        if (arguments != null && arguments.containsKey(ARG_EVENT_ID)) {
+            mEventID = (String) arguments.getSerializable(ARG_EVENT_ID);
+        }
+
+        if (mEventID != null && !mEventID.isEmpty()) {
+            setHasOptionsMenu(false);
+        } else {
+            setHasOptionsMenu(true);
+        }
 
         mClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -138,7 +152,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 if (activity != null) {
                     TextView map_text = activity.findViewById(R.id.map_text);
                     FamilyTree familyTree = FamilyTree.get();
-                    Event event = familyTree.getEvent(marker.getTitle());
+                    Event event = familyTree.getEvent((String) marker.getTag());
                     Person person = familyTree.getPerson(event.getPersonID());
                     mPersonID = person.getPersonID();
 
@@ -158,13 +172,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
 
         for (Event event : FamilyTree.get().getEvents()) {
-            LatLng marker = new LatLng(event.getLatitude(), event.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(marker).title(event.getEventID()));
+            LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(location)).setTag(event.getEventID());
+        }
+
+        if (mEventID != null && !mEventID.isEmpty()) {
+            Event event = FamilyTree.get().getEvent(mEventID);
+            LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
         }
     }
 
     public static MapFragment newInstance() {
         return new MapFragment();
+    }
+
+    public static MapFragment newInstance(String eventID) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_EVENT_ID, eventID);
+
+        MapFragment fragment = new MapFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     private boolean hasLocationPermission() {

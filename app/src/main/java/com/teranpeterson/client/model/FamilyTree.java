@@ -15,6 +15,7 @@ public class FamilyTree {
     private String mAuthToken;
     private List<Person> mPersons;
     private List<Event> mEvents;
+    private String url;
 
     private FamilyTree() {
         mPersons = new ArrayList<>();
@@ -85,6 +86,10 @@ public class FamilyTree {
         Filter.get().setEventTypes(types);
     }
 
+    public String getAuthToken() {
+        return mAuthToken;
+    }
+
     public void setAuthToken(String authToken) {
         this.mAuthToken = authToken;
     }
@@ -93,6 +98,19 @@ public class FamilyTree {
 
     public boolean isLoggedIn() {
         return (mAuthToken != null && !mAuthToken.isEmpty());
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void clear() {
+        mPersons.clear();
+        mEvents.clear();
     }
 
     public void associate() {
