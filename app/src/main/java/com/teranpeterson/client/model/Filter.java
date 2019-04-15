@@ -1,8 +1,5 @@
 package com.teranpeterson.client.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Filter {
@@ -12,14 +9,12 @@ public class Filter {
     private boolean mMother;
     private boolean mMale;
     private boolean mFemale;
-    private Map<String, Boolean> mEventTypes;
 
     private Filter() {
         mFather = true;
         mMother = true;
         mMale = true;
         mFemale = true;
-        mEventTypes = new HashMap<>();
     }
 
     public static Filter get() {
@@ -61,21 +56,9 @@ public class Filter {
         this.mFemale = female;
     }
 
-    public Map<String, Boolean> getEventTypes() {
-        return mEventTypes;
-    }
-
-    public void setEventTypes(Map<String, Boolean> mEventTypes) {
-        this.mEventTypes = mEventTypes;
-    }
-
-    public void updateEventEnabled(String type, boolean enabled) {
-        mEventTypes.put(type.toLowerCase(), enabled);
-    }
-
     public boolean filter(Event event) {
         Person person = FamilyTree.get().getPerson(event.getPersonID());
-        for (Map.Entry entry : mEventTypes.entrySet()) {
+        for (Map.Entry entry : FamilyTree.get().getEventTypes().entrySet()) {
             if (entry.getKey().equals(event.getEventType().toLowerCase())) {
                 if (!((boolean) entry.getValue())) {
                     return false;

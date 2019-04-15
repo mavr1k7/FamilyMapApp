@@ -30,7 +30,7 @@ public class FilterActivity extends AppCompatActivity {
 
         Filter filter = Filter.get();
 
-        Map<String, Boolean> eventTypes = filter.getEventTypes();
+        Map<String, Boolean> eventTypes = FamilyTree.get().getEventTypes();
 
         mData = new ArrayList<>();
         for (Map.Entry type : eventTypes.entrySet()) {

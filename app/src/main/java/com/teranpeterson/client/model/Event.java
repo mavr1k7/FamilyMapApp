@@ -1,5 +1,7 @@
 package com.teranpeterson.client.model;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
 import java.util.Objects;
 import java.util.UUID;
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.teranpeterson.client.R;
+import com.teranpeterson.client.model.FamilyTree;
 import com.teranpeterson.client.model.Filter;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class OptionAdapter extends RecyclerView.Adapter<OptionViewHolder> {
         viewHolder.getSwitch().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Filter.get().updateEventEnabled(option.getType(), isChecked);
+                FamilyTree.get().updateEventEnabled(option.getType(), isChecked);
             }
         });
     }

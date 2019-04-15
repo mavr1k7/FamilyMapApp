@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -30,6 +31,7 @@ import com.teranpeterson.client.R;
 import com.teranpeterson.client.model.Event;
 import com.teranpeterson.client.model.FamilyTree;
 import com.teranpeterson.client.model.Person;
+import com.teranpeterson.client.model.Settings;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
@@ -76,19 +78,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) mapFragment.getMapAsync(this);
 
-        view.findViewById(R.id.map_text).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPersonID != null) startActivity(PersonActivity.newIntent(getContext(), mPersonID));
-            }
-        });
-
-        view.findViewById(R.id.map_profile).setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPersonID != null) startActivity(PersonActivity.newIntent(getContext(), mPersonID));
-            }
-        }));
+        view.findViewById(R.id.map_text).setOnClickListener(trayClick);
+        view.findViewById(R.id.map_profile).setOnClickListener(trayClick);
 
         return view;
     }
@@ -145,41 +136,53 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                Activity activity = getActivity();
-                if (activity != null) {
-                    TextView map_text = activity.findViewById(R.id.map_text);
-                    FamilyTree familyTree = FamilyTree.get();
-                    Event event = familyTree.getEvent((String) marker.getTag());
-                    Person person = familyTree.getPerson(event.getPersonID());
-                    mPersonID = person.getPersonID();
+        switch (Settings.get().getMapType()) {
+            case "Hybrid":
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
+            case "Satellite":
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            case "Terrain":
+                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                break;
+            default:
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+        }
 
-                    String text = person.getFirstName() + " " + person.getLastName() + "\n" + event.getEventType()
-                            + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
-                    map_text.setText(text);
-
-                    ImageView map_profile = activity.findViewById(R.id.map_profile);
-                    if (person.getGender().equals("f")) {
-                        map_profile.setImageResource(R.drawable.female);
-                    } else {
-                        map_profile.setImageResource(R.drawable.male);
-                    }
-                }
-                return false;
-            }
-        });
+        mMap.setOnMarkerClickListener(markerClick);
 
         for (Event event : FamilyTree.get().getEvents()) {
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(location)).setTag(event.getEventID());
+            Marker marker = mMap.addMarker(new MarkerOptions().position(location));
+            marker.setIcon(BitmapDescriptorFactory.defaultMarker(FamilyTree.get().getEventColor(event.getEventType())));
+            marker.setTag(event.getEventID());
         }
 
         if (mEventID != null && !mEventID.isEmpty()) {
             Event event = FamilyTree.get().getEvent(mEventID);
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+
+            Activity activity = getActivity();
+            if (activity != null) {
+                TextView map_text = activity.findViewById(R.id.map_text);
+                FamilyTree familyTree = FamilyTree.get();
+                Person person = familyTree.getPerson(event.getPersonID());
+                mPersonID = person.getPersonID();
+
+                String text = person.getFirstName() + " " + person.getLastName() + "\n" + event.getEventType()
+                        + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
+                map_text.setText(text);
+
+                ImageView map_profile = activity.findViewById(R.id.map_profile);
+                if (person.getGender().equals("f")) {
+                    map_profile.setImageResource(R.drawable.female);
+                } else {
+                    map_profile.setImageResource(R.drawable.male);
+                }
+            }
         }
     }
 
@@ -201,4 +204,37 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .checkSelfPermission(getActivity(), LOCATION_PERMISSIONS[0]);
         return result == PackageManager.PERMISSION_GRANTED;
     }
+
+    private final GoogleMap.OnMarkerClickListener markerClick = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            Activity activity = getActivity();
+            if (activity != null) {
+                TextView map_text = activity.findViewById(R.id.map_text);
+                FamilyTree familyTree = FamilyTree.get();
+                Event event = familyTree.getEvent((String) marker.getTag());
+                Person person = familyTree.getPerson(event.getPersonID());
+                mPersonID = person.getPersonID();
+
+                String text = person.getFirstName() + " " + person.getLastName() + "\n" + event.getEventType()
+                        + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
+                map_text.setText(text);
+
+                ImageView map_profile = activity.findViewById(R.id.map_profile);
+                if (person.getGender().equals("f")) {
+                    map_profile.setImageResource(R.drawable.female);
+                } else {
+                    map_profile.setImageResource(R.drawable.male);
+                }
+            }
+            return false;
+        }
+    };
+
+    private final View.OnClickListener trayClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mPersonID != null) startActivity(PersonActivity.newIntent(getContext(), mPersonID));
+        }
+    };
 }

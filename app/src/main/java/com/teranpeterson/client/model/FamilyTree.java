@@ -3,6 +3,8 @@ package com.teranpeterson.client.model;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +18,14 @@ public class FamilyTree {
     private List<Person> mPersons;
     private List<Event> mEvents;
     private String url;
+    private Map<String, Boolean> mEventTypes;
+    private Map<String, Float> mEventColors;
 
     private FamilyTree() {
         mPersons = new ArrayList<>();
         mEvents = new ArrayList<>();
+        mEventTypes = new HashMap<>();
+        mEventColors = new HashMap<>();
     }
 
     public static FamilyTree get() {
@@ -75,15 +81,23 @@ public class FamilyTree {
     }
 
     public void findEventTypes() {
-        Map<String, Boolean> types = new HashMap<>();
+        List<Float> colors = new ArrayList<>();
+        colors.add(BitmapDescriptorFactory.HUE_RED);
+        colors.add(BitmapDescriptorFactory.HUE_YELLOW);
+        colors.add(BitmapDescriptorFactory.HUE_GREEN);
+        colors.add(BitmapDescriptorFactory.HUE_BLUE);
 
+        int i = 0;
+        float hue = 120.0f;
         for (Event event : mEvents) {
             String type = event.getEventType().toLowerCase();
-            if (!types.containsKey(type)) {
-                types.put(type, Boolean.TRUE);
+            if (!mEventTypes.containsKey(type)) {
+                mEventTypes.put(type, Boolean.TRUE);
+                mEventColors.put(type, hue);
+                hue += 60.0f;
             }
+            if (hue > 360.0f) hue = 45.0f;
         }
-        Filter.get().setEventTypes(types);
     }
 
     public String getAuthToken() {
@@ -106,6 +120,39 @@ public class FamilyTree {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Map<String, Boolean> getEventTypes() {
+        return mEventTypes;
+    }
+
+    public void setEventTypes(Map<String, Boolean> mEventTypes) {
+        this.mEventTypes = mEventTypes;
+    }
+
+    public void updateEventEnabled(String type, boolean enabled) {
+        mEventTypes.put(type.toLowerCase(), enabled);
+    }
+
+    public Map<String, Float> getEventColors() {
+        return mEventColors;
+    }
+
+    public void setEventColors(Map<String, Float> mEventColors) {
+        this.mEventColors = mEventColors;
+    }
+
+    public void updateEventColor(String type, float color) {
+        mEventColors.put(type.toLowerCase(), color);
+    }
+
+    public float getEventColor(String type) {
+        type = type.toLowerCase();
+        if (mEventColors.containsKey(type)) {
+            return mEventColors.get(type);
+        } else {
+            return 210.0f;
+        }
     }
 
     public void clear() {
@@ -173,11 +220,4 @@ public class FamilyTree {
         }
         return out.toString();
     }
-
-    // Sorted list of events for each person
-    // List of children fro each person
-    // Event types
-    // Event type colors
-    // Paternal ancestors
-    // Maternal ancestors
 }
