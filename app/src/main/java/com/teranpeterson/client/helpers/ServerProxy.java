@@ -103,6 +103,7 @@ public class ServerProxy {
             Reader reader = new InputStreamReader(respBody);
             FamilyTree.get().setEvents(Deserializer.eventResult(reader).getData());
             FamilyTree.get().associate();
+            FamilyTree.get().findEventTypes();
         } finally {
             http.disconnect();
         }

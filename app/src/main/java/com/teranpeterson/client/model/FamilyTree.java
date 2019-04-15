@@ -15,7 +15,6 @@ public class FamilyTree {
     private String mAuthToken;
     private List<Person> mPersons;
     private List<Event> mEvents;
-    private Map<String, Boolean> mEventTypes = new HashMap<>();
 
     private FamilyTree() {
         mPersons = new ArrayList<>();
@@ -74,27 +73,23 @@ public class FamilyTree {
         this.mEvents = events;
     }
 
+    public void findEventTypes() {
+        Map<String, Boolean> types = new HashMap<>();
+
+        for (Event event : mEvents) {
+            String type = event.getEventType().toLowerCase();
+            if (!types.containsKey(type)) {
+                types.put(type, Boolean.FALSE);
+            }
+        }
+        Filter.get().setEventTypes(types);
+    }
+
     public void setAuthToken(String authToken) {
         this.mAuthToken = authToken;
     }
 
     public void setRootUserID(String userID) { this.mRootUserID = userID; }
-
-    public Map<String, Boolean> getEventTypes() {
-        return mEventTypes;
-    }
-
-    public void setEventTypes(Map<String, Boolean> mEventTypes) {
-        this.mEventTypes = mEventTypes;
-    }
-
-    public void findEventTypes() {
-        for (Event event : mEvents) {
-            if (!mEventTypes.containsKey(event.getEventType())) {
-                mEventTypes.put(event.getEventType(), Boolean.TRUE);
-            }
-        }
-    }
 
     public boolean isLoggedIn() {
         return (mAuthToken != null && !mAuthToken.isEmpty());
@@ -120,6 +115,31 @@ public class FamilyTree {
         person.setChild(child);
         associateHelper(person.getFather(), side, id);
         associateHelper(person.getMother(), side, id);
+    }
+
+    public List<Person> searchPersons(String match) {
+        match = match.toLowerCase();
+
+        List<Person> results = new ArrayList<>();
+        for (Person person : mPersons) {
+            if (person.getFirstName().toLowerCase().contains(match) || person.getLastName().toLowerCase().contains(match)) {
+                results.add(person);
+            }
+        }
+        return results;
+    }
+
+    public List<Event> searchEvents(String match) {
+        match = match.toLowerCase();
+
+        List<Event> results = new ArrayList<>();
+        for (Event event : getEvents()) {
+            if (event.getCountry().toLowerCase().contains(match) || event.getCity().toLowerCase().contains(match)
+                    || event.getEventType().toLowerCase().contains(match) || Integer.toString(event.getYear()).toLowerCase().contains(match)) {
+                results.add(event);
+            }
+        }
+        return results;
     }
 
     @NonNull

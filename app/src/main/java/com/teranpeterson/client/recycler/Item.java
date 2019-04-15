@@ -1,15 +1,17 @@
-package com.teranpeterson.client.helpers;
+package com.teranpeterson.client.recycler;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Item implements Parcelable {
+    private String id;
     private String part1;
     private String part2;
     private boolean person;
     private boolean male;
 
-    public Item(String part1, String part2, boolean person, boolean male) {
+    public Item(String id, String part1, String part2, boolean person, boolean male) {
+        this.id = id;
         this.part1 = part1;
         this.part2 = part2;
         this.person = person;
@@ -40,6 +42,8 @@ public class Item implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
     }
+
+    public String getId() { return this.id; }
 
     public String getPart1() {
         return this.part1;

@@ -1,10 +1,15 @@
-package com.teranpeterson.client.helpers;
+package com.teranpeterson.client.recycler;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.teranpeterson.client.R;
+import com.teranpeterson.client.recycler.HeaderViewHolder;
+import com.teranpeterson.client.recycler.Item;
+import com.teranpeterson.client.recycler.ItemViewHolder;
+import com.teranpeterson.client.ui.PersonActivity;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
@@ -33,6 +38,17 @@ public class ExpandableRecyclerAdapter extends ExpandableRecyclerViewAdapter<Hea
         holder.setText1(item.getPart1());
         holder.setText2(item.getPart2());
         holder.setIcon(item.isPerson(), item.isMale());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (item.isPerson()) {
+                    v.getContext().startActivity(PersonActivity.newIntent(v.getContext(), item.getId()));
+                } else {
+                    Toast.makeText(v.getContext(), "Event ID: " + item.getId(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override

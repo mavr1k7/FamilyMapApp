@@ -1,28 +1,25 @@
 package com.teranpeterson.client.model;
 
-import android.support.annotation.NonNull;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Filter {
     private static Filter sFilter;
 
-    private boolean mBirth;
-    private boolean mBaptism;
-    private boolean mMarriage;
-    private boolean mDeath;
     private boolean mFather;
     private boolean mMother;
     private boolean mMale;
     private boolean mFemale;
+    private Map<String, Boolean> mEventTypes;
 
     private Filter() {
-        mBirth = false;
-        mBaptism = false;
-        mMarriage = false;
-        mDeath = false;
         mFather = false;
         mMother = false;
         mMale = false;
         mFemale = false;
+        mEventTypes = new HashMap<>();
     }
 
     public static Filter get() {
@@ -30,38 +27,6 @@ public class Filter {
             sFilter = new Filter();
         }
         return sFilter;
-    }
-
-    public boolean isBirth() {
-        return mBirth;
-    }
-
-    public void setBirth(boolean birth) {
-        this.mBirth = birth;
-    }
-
-    public boolean isBaptism() {
-        return mBaptism;
-    }
-
-    public void setBaptism(boolean baptism) {
-        this.mBaptism = baptism;
-    }
-
-    public boolean isMarriage() {
-        return mMarriage;
-    }
-
-    public void setMarriage(boolean marriage) {
-        this.mMarriage = marriage;
-    }
-
-    public boolean isDeath() {
-        return mDeath;
-    }
-
-    public void setDeath(boolean death) {
-        this.mDeath = death;
     }
 
     public boolean isFather() {
@@ -96,16 +61,22 @@ public class Filter {
         this.mFemale = female;
     }
 
+    public Map<String, Boolean> getEventTypes() {
+        return mEventTypes;
+    }
+
+    public void setEventTypes(Map<String, Boolean> mEventTypes) {
+        this.mEventTypes = mEventTypes;
+    }
+
+    public void updateEventEnabled(String type, boolean enabled) {
+        mEventTypes.put(type.toLowerCase(), enabled);
+    }
+
     public boolean filter(Event event) {
         switch (event.getEventType()) {
 
         }
         return true;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "Birth: " + mBirth + ", Father: " + mFather + ", Male: " + mMale + "\n";
     }
 }

@@ -1,4 +1,4 @@
-package com.teranpeterson.client.helpers;
+package com.teranpeterson.client.recycler;
 
 import android.view.View;
 import android.widget.ImageView;
