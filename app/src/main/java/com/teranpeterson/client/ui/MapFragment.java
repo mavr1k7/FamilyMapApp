@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -27,17 +28,23 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.teranpeterson.client.R;
 import com.teranpeterson.client.model.Event;
 import com.teranpeterson.client.model.FamilyTree;
 import com.teranpeterson.client.model.Person;
 import com.teranpeterson.client.model.Settings;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private String mPersonID;
     private String mEventID;
     private GoogleApiClient mClient;
+    private List<Polyline> mLines;
 
     private static final String ARG_EVENT_ID = "event_id";
     private static final int REQUEST_LOCATION_PERMISSIONS = 0;
@@ -49,6 +56,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLines = new ArrayList<>();
 
         Bundle arguments = getArguments();
         if (arguments != null && arguments.containsKey(ARG_EVENT_ID)) {
@@ -153,6 +161,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mMap.setOnMarkerClickListener(markerClick);
 
+        // Load all events to map
         for (Event event : FamilyTree.get().getEvents()) {
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
             Marker marker = mMap.addMarker(new MarkerOptions().position(location));
@@ -160,29 +169,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             marker.setTag(event.getEventID());
         }
 
+        // Center camera on provided event id and display event info
         if (mEventID != null && !mEventID.isEmpty()) {
             Event event = FamilyTree.get().getEvent(mEventID);
             LatLng location = new LatLng(event.getLatitude(), event.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
 
-            Activity activity = getActivity();
-            if (activity != null) {
-                TextView map_text = activity.findViewById(R.id.map_text);
-                FamilyTree familyTree = FamilyTree.get();
-                Person person = familyTree.getPerson(event.getPersonID());
-                mPersonID = person.getPersonID();
-
-                String text = person.getFirstName() + " " + person.getLastName() + "\n" + event.getEventType()
-                        + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
-                map_text.setText(text);
-
-                ImageView map_profile = activity.findViewById(R.id.map_profile);
-                if (person.getGender().equals("f")) {
-                    map_profile.setImageResource(R.drawable.female);
-                } else {
-                    map_profile.setImageResource(R.drawable.male);
-                }
-            }
+            fillInfo(mEventID);
         }
     }
 
@@ -208,25 +201,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private final GoogleMap.OnMarkerClickListener markerClick = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
-            Activity activity = getActivity();
-            if (activity != null) {
-                TextView map_text = activity.findViewById(R.id.map_text);
-                FamilyTree familyTree = FamilyTree.get();
-                Event event = familyTree.getEvent((String) marker.getTag());
-                Person person = familyTree.getPerson(event.getPersonID());
-                mPersonID = person.getPersonID();
-
-                String text = person.getFirstName() + " " + person.getLastName() + "\n" + event.getEventType()
-                        + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
-                map_text.setText(text);
-
-                ImageView map_profile = activity.findViewById(R.id.map_profile);
-                if (person.getGender().equals("f")) {
-                    map_profile.setImageResource(R.drawable.female);
-                } else {
-                    map_profile.setImageResource(R.drawable.male);
-                }
-            }
+            fillInfo((String) marker.getTag());
             return false;
         }
     };
@@ -237,4 +212,85 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             if (mPersonID != null) startActivity(PersonActivity.newIntent(getContext(), mPersonID));
         }
     };
+
+    private void fillInfo(String eventID) {
+        clearLines();
+        Activity activity = getActivity();
+        if (activity != null) {
+            TextView map_text = activity.findViewById(R.id.map_text);
+            FamilyTree familyTree = FamilyTree.get();
+            Settings settings = Settings.get();
+            Event event = familyTree.getEvent(eventID);
+            Person person = familyTree.getPerson(event.getPersonID());
+            mPersonID = person.getPersonID();
+
+            String text = person.getFirstName() + " " + person.getLastName() + "\n" + event.getEventType()
+                    + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
+            map_text.setText(text);
+
+            ImageView map_profile = activity.findViewById(R.id.map_profile);
+            if (person.getGender().equals("f")) {
+                map_profile.setImageResource(R.drawable.female);
+            } else {
+                map_profile.setImageResource(R.drawable.male);
+            }
+
+            // Spouse lines
+            List<Event> spouseEvents = familyTree.getMyEvents(person.getSpouse());
+            if (!spouseEvents.isEmpty() && settings.isSpouseLines()) {
+                Event spouseEvent = spouseEvents.get(0);
+                Polyline line = mMap.addPolyline(new PolylineOptions()
+                        .add(new LatLng(event.getLatitude(), event.getLongitude()), new LatLng(spouseEvent.getLatitude(), spouseEvent.getLongitude()))
+                        .width(4)
+                        .color(settings.getSpouseLinesColorValue()));
+                mLines.add(line);
+            }
+
+            // Life Story lines
+            List<Event> personEvents = familyTree.getMyEvents(person.getPersonID());
+            if (!personEvents.isEmpty() && settings.isLifeStoryLines()) {
+                List<LatLng> points = new ArrayList<>();
+                for (Event personEvent : personEvents) {
+                    points.add(new LatLng(personEvent.getLatitude(), personEvent.getLongitude()));
+                }
+                Polyline line = mMap.addPolyline(new PolylineOptions()
+                        .addAll(points)
+                        .width(4)
+                        .color(settings.getLifeStoryLinesColorValue()));
+                mLines.add(line);
+            }
+
+            // Family Tree lines
+            if (settings.isFamilyTreeLines()) {
+                drawLines(new LatLng(event.getLatitude(), event.getLongitude()), person.getFather(), 10.0f, settings.getFamilyTreeLinesColorValue());
+                drawLines(new LatLng(event.getLatitude(), event.getLongitude()), person.getMother(), 10.0f, settings.getFamilyTreeLinesColorValue());
+            }
+        }
+    }
+
+    private void drawLines(LatLng childLoc, String parentID, float width, int color) {
+        List<Event> parentEvents = FamilyTree.get().getMyEvents(parentID);
+        if (!parentEvents.isEmpty()) {
+            Event parentEvent = parentEvents.get(0);
+            LatLng parentLoc = new LatLng(parentEvent.getLatitude(), parentEvent.getLongitude());
+            Polyline line = mMap.addPolyline(new PolylineOptions()
+                    .add(childLoc, parentLoc)
+                    .width(width)
+                    .color(color));
+            mLines.add(line);
+
+            Person parent = FamilyTree.get().getPerson(parentID);
+            if (parent != null) {
+                drawLines(parentLoc, parent.getFather(), width - 2.0f, color);
+                drawLines(parentLoc, parent.getMother(), width - 2.0f, color);
+            }
+        }
+    }
+
+    private void clearLines() {
+        for (Polyline line : mLines) {
+            line.remove();
+        }
+        mLines.clear();
+    }
 }

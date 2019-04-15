@@ -10,8 +10,8 @@ import com.teranpeterson.client.request.RegisterRequest;
  * @author Teran Peterson
  * @version v0.1.2
  */
-public class Serializer {
-    public static String serialize(RegisterRequest request) { return new Gson().toJson(request); }
+class Serializer {
+    static String serialize(RegisterRequest request) { return new Gson().toJson(request); }
 
-    public static String serialize(LoginRequest request) { return new Gson().toJson(request); }
+    static String serialize(LoginRequest request) { return new Gson().toJson(request); }
 }

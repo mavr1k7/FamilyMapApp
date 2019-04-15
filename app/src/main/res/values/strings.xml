@@ -59,6 +59,7 @@
         <item>Yellow</item>
         <item>Green</item>
         <item>Blue</item>
+        <item>Black</item>
     </string-array>
     <string-array name="setting_map_options">
         <item>Normal</item>

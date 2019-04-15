@@ -133,7 +133,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             FamilyTree.get().clear();
-            new DataSyncTask(v.getContext()).execute(FamilyTree.get().getUrl(), FamilyTree.get().getAuthToken());
+            new ReSyncTask(v.getContext()).execute(FamilyTree.get().getUrl(), FamilyTree.get().getAuthToken());
 
         }
     };
@@ -147,12 +147,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     };
 
-    private static class DataSyncTask extends AsyncTask<String, Void, PersonResult> {
+    private static class ReSyncTask extends AsyncTask<String, Void, PersonResult> {
 
         private WeakReference<Context> activityReference;
         static final String TAG = "DataSyncTask";
 
-        DataSyncTask(Context context) {
+        ReSyncTask(Context context) {
             activityReference = new WeakReference<>(context);
         }
 

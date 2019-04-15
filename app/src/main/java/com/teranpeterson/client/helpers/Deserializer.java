@@ -13,10 +13,10 @@ import java.io.Reader;
  * @author Teran Peterson
  * @version v0.1.2
  */
-public class Deserializer {
-    public static LoginResult loginResult(Reader reader) { return new Gson().fromJson(reader, LoginResult.class); }
+class Deserializer {
+    static LoginResult loginResult(Reader reader) { return new Gson().fromJson(reader, LoginResult.class); }
 
-    public static PersonResult personResult(Reader reader) { return new Gson().fromJson(reader, PersonResult.class); }
+    static PersonResult personResult(Reader reader) { return new Gson().fromJson(reader, PersonResult.class); }
 
-    public static EventResult eventResult(Reader reader) { return new Gson().fromJson(reader, EventResult.class); }
+    static EventResult eventResult(Reader reader) { return new Gson().fromJson(reader, EventResult.class); }
 }

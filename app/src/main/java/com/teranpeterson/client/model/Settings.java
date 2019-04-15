@@ -1,5 +1,7 @@
 package com.teranpeterson.client.model;
 
+import android.graphics.Color;
+
 public class Settings {
     private static Settings sSettings;
 
@@ -19,15 +21,16 @@ public class Settings {
         mLifeStoryLines = true;
         mFamilyTreeLines = true;
         mSpouseLines = true;
-        mLifeStoryLinesColor = "Red";
-        mFamilyTreeLinesColor = "White";
-        mSpouseLinesColor = "Blue";
+        mLifeStoryLinesColor = "Black";
+        mFamilyTreeLinesColor = "Blue";
+        mSpouseLinesColor = "Red";
         mMapType = "Normal";
         colorOptions = new String[] {
                 "Red",
                 "Yellow",
                 "Green",
-                "Blue"
+                "Blue",
+                "Black"
         };
         mapOptions = new String[] {
                 "Normal",
@@ -72,6 +75,10 @@ public class Settings {
         return mLifeStoryLinesColor;
     }
 
+    public int getLifeStoryLinesColorValue() {
+        return colorValue(mLifeStoryLinesColor);
+    }
+
     public void setLifeStoryLinesColor(String mLifeStoryLinesColor) {
         this.mLifeStoryLinesColor = mLifeStoryLinesColor;
     }
@@ -80,12 +87,20 @@ public class Settings {
         return mFamilyTreeLinesColor;
     }
 
+    public int getFamilyTreeLinesColorValue() {
+        return colorValue(mFamilyTreeLinesColor);
+    }
+
     public void setFamilyTreeLinesColor(String mFamilyTreeLinesColor) {
         this.mFamilyTreeLinesColor = mFamilyTreeLinesColor;
     }
 
     public String getSpouseLinesColor() {
         return mSpouseLinesColor;
+    }
+
+    public int getSpouseLinesColorValue() {
+        return colorValue(mSpouseLinesColor);
     }
 
     public void setSpouseLinesColor(String mSpouseLinesColor) {
@@ -106,6 +121,8 @@ public class Settings {
                 return 2;
             case "Blue":
                 return 3;
+            case "Black":
+                return 4;
             default:
                 return 0;
         }
@@ -131,6 +148,23 @@ public class Settings {
                 return 3;
             default:
                 return 0;
+        }
+    }
+
+    private int colorValue(String color) {
+        switch (color) {
+            case "Red":
+                return Color.RED;
+            case "Yellow":
+                return Color.YELLOW;
+            case "Green":
+                return Color.GREEN;
+            case "Blue":
+                return Color.BLUE;
+            case "Black":
+                return Color.BLACK;
+            default:
+                return Color.TRANSPARENT;
         }
     }
 
