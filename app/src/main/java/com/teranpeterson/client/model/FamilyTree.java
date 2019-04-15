@@ -6,6 +6,8 @@ import android.util.Log;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +75,18 @@ public class FamilyTree {
             if (event.getPersonID().equals(id))
                 events.add(event);
         }
+        Collections.sort(events, new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                if (o1.getEventType().toLowerCase().equals("birth")) return -1;
+                if (o2.getEventType().toLowerCase().equals("birth")) return 1;
+                if (o1.getEventType().toLowerCase().equals("death")) return 1;
+                if (o2.getEventType().toLowerCase().equals("death")) return -1;
+                if (o1.getYear() < o2.getYear()) return -1;
+                else if (o1.getYear() > o2.getYear()) return 1;
+                else return o1.getEventType().compareToIgnoreCase(o2.getEventType());
+            }
+        });
         return events;
     }
 
