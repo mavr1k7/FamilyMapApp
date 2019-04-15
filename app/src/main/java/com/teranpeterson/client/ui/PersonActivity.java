@@ -46,7 +46,7 @@ public class PersonActivity extends AppCompatActivity {
         List<Header> categories = new ArrayList<>();
 
         List<Item> events = new ArrayList<>();
-        for (Event event : person.getEvents()) {
+        for (Event event : FamilyTree.get().getMyEvents(person.getPersonID())) {
             String part1 = event.getEventType() + ": " + event.getCity() + ", " + event.getCountry() + " (" + event.getYear() + ")";
             String part2 = person.getFirstName() + " " + person.getLastName();
             events.add(new Item(event.getEventID(), part1, part2, false, false));

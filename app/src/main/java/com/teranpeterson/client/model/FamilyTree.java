@@ -46,10 +46,10 @@ public class FamilyTree {
         List<Event> filtered = new ArrayList<>();
         for (Event event : mEvents) {
             if (Filter.get().filter(event)) {
-
+                filtered.add(event);
             }
         }
-        return mEvents;
+        return filtered;
     }
 
     public Event getEvent(String id) {
@@ -61,9 +61,9 @@ public class FamilyTree {
         return null;
     }
 
-    private List<Event> getMyEvents(String id) {
+    public List<Event> getMyEvents(String id) {
         List<Event> events = new ArrayList<>();
-        for (Event event : mEvents) {
+        for (Event event : getEvents()) {
             if (event.getPersonID().equals(id))
                 events.add(event);
         }
@@ -80,7 +80,7 @@ public class FamilyTree {
         for (Event event : mEvents) {
             String type = event.getEventType().toLowerCase();
             if (!types.containsKey(type)) {
-                types.put(type, Boolean.FALSE);
+                types.put(type, Boolean.TRUE);
             }
         }
         Filter.get().setEventTypes(types);

@@ -15,10 +15,10 @@ public class Filter {
     private Map<String, Boolean> mEventTypes;
 
     private Filter() {
-        mFather = false;
-        mMother = false;
-        mMale = false;
-        mFemale = false;
+        mFather = true;
+        mMother = true;
+        mMale = true;
+        mFemale = true;
         mEventTypes = new HashMap<>();
     }
 
@@ -74,8 +74,21 @@ public class Filter {
     }
 
     public boolean filter(Event event) {
-        switch (event.getEventType()) {
-
+        Person person = FamilyTree.get().getPerson(event.getPersonID());
+        for (Map.Entry entry : mEventTypes.entrySet()) {
+            if (entry.getKey().equals(event.getEventType().toLowerCase())) {
+                if (!((boolean) entry.getValue())) {
+                    return false;
+                }
+            }
+        }
+        if (person.getSide() != null) {
+            if (person.getSide().equals("father") && !mFather) return false;
+            if (person.getSide().equals("mother") && !mMother) return false;
+        }
+        if (person.getGender() != null) {
+            if (person.getGender().equals("m") && !mMale) return false;
+            if (person.getGender().equals("f") && !mFemale) return false;
         }
         return true;
     }
