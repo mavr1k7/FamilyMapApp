@@ -58,7 +58,7 @@ public class Filter {
     /**
      * Returns the current state of the father's side filter
      *
-     * @return True if father's side events should be displayed. False otherwise
+     * @return True if enabled. False if disabled.
      */
     public boolean isFather() {
         return mFather;
@@ -67,7 +67,7 @@ public class Filter {
     /**
      * Updates the state of the father's side filter
      *
-     * @param father True if father's side events should be displayed. False otherwise
+     * @param father True if enabled. False if disabled.
      */
     public void setFather(boolean father) {
         this.mFather = father;
@@ -76,7 +76,7 @@ public class Filter {
     /**
      * Returns the current state of the mother's side filter
      *
-     * @return True if mother's side events should be displayed. False otherwise
+     * @return True if enabled. False if disabled.
      */
     public boolean isMother() {
         return mMother;
@@ -85,7 +85,7 @@ public class Filter {
     /**
      * Updates the state of the mother's side filter
      *
-     * @param mother True if mother's side events should be displayed. False otherwise
+     * @param mother True if enabled. False if disabled.
      */
     public void setMother(boolean mother) {
         this.mMother = mother;
@@ -94,7 +94,7 @@ public class Filter {
     /**
      * Returns the current state of the male filter
      *
-     * @return True if male events should be displayed. False otherwise
+     * @return True if enabled. False if disabled.
      */
     public boolean isMale() {
         return mMale;
@@ -103,7 +103,7 @@ public class Filter {
     /**
      * Updates the state of the male filter
      *
-     * @param male True if male events should be displayed. False otherwise
+     * @param male True if enabled. False if disabled.
      */
     public void setMale(boolean male) {
         this.mMale = male;
@@ -112,7 +112,7 @@ public class Filter {
     /**
      * Returns the current state of the female filter
      *
-     * @return True if female events should be displayed. False otherwise
+     * @return True if enabled. False if disabled.
      */
     public boolean isFemale() {
         return mFemale;
@@ -121,7 +121,7 @@ public class Filter {
     /**
      * Updates the state of the female filter
      *
-     * @param female True if female events should be displayed. False otherwise
+     * @param female True if enabled. False if disabled.
      */
     public void setFemale(boolean female) {
         this.mFemale = female;
