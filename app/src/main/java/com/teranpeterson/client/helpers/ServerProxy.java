@@ -47,6 +47,7 @@ public class ServerProxy {
             http.addRequestProperty("Accept", "application/json");
             http.connect();
 
+            // Converts the request object into either a Login Request or a Register Request.
             OutputStream requestBody = http.getOutputStream();
             OutputStreamWriter sw = new OutputStreamWriter(requestBody);
             if (request.getClass().toString().equals("class com.teranpeterson.client.request.LoginRequest")) {

@@ -20,14 +20,43 @@ import com.teranpeterson.client.model.Person;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Search Activity contains a recycler view used to display all the persons and events that match
+ * a given search criteria. When it is loaded, no information is shown. After a search is performed,
+ * the list is updated with all the matching items.
+ *
+ * @author Teran Peterson
+ * @version v0.1.1
+ */
 public class SearchActivity extends AppCompatActivity {
+    /**
+     * Link to the icon displayed next to the search bar (magnifying glass or x)
+     */
     private ImageView mIcon;
+    /**
+     * Link to the search box
+     */
     private EditText mSearch;
-    private RecyclerView mRecyclerView;
+    /**
+     * Link to the adapter used to display the recycler view info
+     */
     private SearchAdapter mAdapter;
+    /**
+     * List of data to display in the recycler view
+     */
     private List<Item> mData;
+    /**
+     * Boolean value that decides what clicking on the mIcon does. If it is true, it switches mIcon
+     * to a magnifying glass, clears the search field, and removes all previous results. If it is false,
+     * it switches mIcon to an x, and performs the search function, displaying all matching items.
+     */
     private boolean clear;
 
+    /**
+     * When the activity is created, the search field and recycler view are created and set to empty.
+     * An OnClickListener is enabled on mIcon to perform search or clear functions. An TextWatcher is
+     * also enabled to update values if the x is not clicked.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +67,14 @@ public class SearchActivity extends AppCompatActivity {
         mData = new ArrayList<>();
         clear = false;
 
-        mRecyclerView = findViewById(R.id.search_recycler);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
+        RecyclerView recyclerView = findViewById(R.id.search_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getParent()));
         mAdapter = new SearchAdapter(this, mData);
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);
 
+        // When mIcon is clicked, if clear is true, the field is cleared and all of the data is reset
+        // to empty. It clear is false, a search is performed and the data is updated to display all
+        // the items matching the search criteria
         mIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,15 +111,17 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        // After text in mSearch is modified, mIcon is updated to a magnifying glass and reset to perform
+        // a search function
         mSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                // Do nothing
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                // Do nothing
             }
 
             @Override

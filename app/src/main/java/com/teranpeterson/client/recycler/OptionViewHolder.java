@@ -58,7 +58,7 @@ class OptionViewHolder extends ChildViewHolder {
     }
 
     /**
-     * Returns the switch object. Used to enable a setOnCheckedChangeListener
+     * Returns the switch object. Used to enable a OnCheckedChangeListener
      */
     Switch getSwitch() { return enabled; }
 }

@@ -49,7 +49,7 @@ public class OptionAdapter extends RecyclerView.Adapter<OptionViewHolder> {
 
     /**
      * Binds each view to an option. Each view is given values pulled from the option and a
-     * setOnCheckedChangeListener event is enabled. Clicking on a switch changes the state of that
+     * OnCheckedChangeListener event is enabled. Clicking on a switch changes the state of that
      * event filter in the Filter singleton.
      */
     @Override

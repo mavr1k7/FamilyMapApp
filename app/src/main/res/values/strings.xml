@@ -54,6 +54,10 @@
     <string name="resync_date_desc">FROM FAMILY MAP SERVER</string>
     <string name="logout">Logout</string>
     <string name="logout_desc">RETURNS TO LOGIN SCREEN</string>
+    <string name="search_icon_desc">Search Icon</string>
+    <string name="map_profile_desc">Map Profile</string>
+    <string name="recycler_arrow_desc">Arrow</string>
+    <string name="recycler_profile_desc">Profile</string>
     <string-array name="setting_color_options">
         <item>Red</item>
         <item>Yellow</item>
