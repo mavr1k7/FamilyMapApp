@@ -65,7 +65,7 @@ public class LoginFragment extends Fragment {
         mSignInButton = view.findViewById(R.id.button_sign_in);
         mRegisterButton = view.findViewById(R.id.button_register);
 
-        mSignInButton.setEnabled(true);
+        mSignInButton.setEnabled(false);
         mRegisterButton.setEnabled(false);
 
         mServerHostField.addTextChangedListener(watcher);
