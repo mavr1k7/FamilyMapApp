@@ -10,11 +10,11 @@ public class Result {
     /**
      * True if the request was successful, otherwise false
      */
-    protected boolean success;
+    private boolean success;
     /**
      * Information about errors that happened while processing the request
      */
-    protected String message;
+    private String message;
 
     /**
      * Checks if the request was successful or not
@@ -26,29 +26,11 @@ public class Result {
     }
 
     /**
-     * Sets the success or failure of the request
-     *
-     * @param success True if successful, otherwise false
-     */
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    /**
      * Gets the error message that occurred while processing the request
      *
      * @return Information about the error
      */
     public String getMessage() {
         return message;
-    }
-
-    /**
-     * Sets the error message that occurred while processing the request
-     *
-     * @param message Information about the error
-     */
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

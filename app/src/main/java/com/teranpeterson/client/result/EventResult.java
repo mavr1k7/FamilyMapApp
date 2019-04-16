@@ -21,36 +21,6 @@ public class EventResult extends Result {
     private Event event;
 
     /**
-     * Creates a successful event result with information about ALL the data
-     *
-     * @param data Stores the data
-     */
-    public EventResult(List<Event> data) {
-        this.data = data;
-        super.success = true;
-    }
-
-    /**
-     * Creates a successful event result with information about the event
-     *
-     * @param event Stores the event
-     */
-    public EventResult(Event event) {
-        this.event = event;
-        super.success = true;
-    }
-
-    /**
-     * Creates a failing event result with the given error message
-     *
-     * @param message Description of the error
-     */
-    public EventResult(String message) {
-        super.message = message;
-        super.success = false;
-    }
-
-    /**
      * Gets a list of all the data related to the user
      *
      * @return List of all the data related to the user
@@ -66,15 +36,6 @@ public class EventResult extends Result {
      */
     public void setData(List<Event> data) {
         this.data = data;
-    }
-
-    /**
-     * Adds a event to the list of data related to the user
-     *
-     * @param event Event related to the user
-     */
-    public void addEvent(Event event) {
-        this.data.add(event);
     }
 
     /**

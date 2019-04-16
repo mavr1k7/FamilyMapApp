@@ -21,45 +21,6 @@ public class PersonResult extends Result {
     private Person person;
 
     /**
-     * Creates a successful person result with information about ALL the data
-     *
-     * @param data Stores data
-     */
-    public PersonResult(List<Person> data) {
-        this.data = data;
-        super.success = true;
-    }
-
-    /**
-     * Creates a successful person result with information about the person
-     *
-     * @param person Stores person
-     */
-    public PersonResult(Person person) {
-        this.person = person;
-        super.success = true;
-    }
-
-    /**
-     * Creates a failing person result with the given error message
-     *
-     * @param message Description of the error
-     */
-    public PersonResult(String message) {
-        super.message = message;
-        super.success = false;
-    }
-
-    public String find(String id) {
-        for (Person p : data) {
-            if (p.getPersonID().equals(id)) {
-                return p.getFirstName() + " " + p.getLastName();
-            }
-        }
-        return "";
-    }
-
-    /**
      * Gets a list of all the data related to the user
      *
      * @return List of all the data related to the user
@@ -75,15 +36,6 @@ public class PersonResult extends Result {
      */
     public void setData(List<Person> data) {
         this.data = data;
-    }
-
-    /**
-     * Adds a person to the list of data related to the user
-     *
-     * @param person Person related to the user
-     */
-    public void addData(Person person) {
-        this.data.add(person);
     }
 
     /**

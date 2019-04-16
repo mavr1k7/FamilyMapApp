@@ -16,10 +16,6 @@ public class LoginRequest extends Request {
      */
     private String password;
 
-    public LoginRequest() {
-
-    }
-
     /**
      * Creates a login request with the given information
      *
