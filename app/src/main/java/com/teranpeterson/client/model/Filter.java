@@ -160,4 +160,17 @@ public class Filter {
         }
         return true;
     }
+
+    /**
+     * Reset all the filters in the system
+     */
+    void reset() {
+        for (Map.Entry entry : FamilyTree.get().getEventTypes().entrySet()) {
+            FamilyTree.get().updateEventEnabled((String) entry.getKey(), true);
+        }
+        mFather = true;
+        mMother = true;
+        mMale = true;
+        mFemale = true;
+    }
 }

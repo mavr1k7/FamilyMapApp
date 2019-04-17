@@ -27,7 +27,7 @@ import com.teranpeterson.client.result.PersonResult;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import static com.teranpeterson.client.helpers.ServerProxy.login;
+import static com.teranpeterson.client.helpers.ServerProxy.loginRegister;
 import static com.teranpeterson.client.helpers.ServerProxy.syncPersons;
 
 /**
@@ -230,7 +230,7 @@ public class LoginFragment extends Fragment {
         @Override
         protected LoginResult doInBackground(Void... params) {
             try {
-                return login(url, request); // Login attempt
+                return loginRegister(url, request); // Login attempt
             } catch (IOException e) {
                 Log.e(TAG, "Failed to connect to server: ", e);
             }

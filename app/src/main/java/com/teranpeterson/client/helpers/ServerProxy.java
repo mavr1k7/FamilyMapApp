@@ -36,7 +36,7 @@ public class ServerProxy {
      * @return Request object with an auth token or an error message
      * @throws IOException Connection error
      */
-    public static LoginResult login(String uri, Request request) throws IOException {
+    public static LoginResult loginRegister(String uri, Request request) throws IOException {
         URL url = new URL(uri);
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
@@ -104,8 +104,10 @@ public class ServerProxy {
 
             Reader reader = new InputStreamReader(respBody);
             PersonResult result = Deserializer.personResult(reader);
-            FamilyTree.get().setPersons(result.getData());
-            syncEvents(uri, authToken);
+            if (result.isSuccess()) {
+                FamilyTree.get().setPersons(result.getData());
+                syncEvents(uri, authToken);
+            }
             return result;
         } finally {
             http.disconnect();
